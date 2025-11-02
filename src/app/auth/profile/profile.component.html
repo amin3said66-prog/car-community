@@ -4,21 +4,21 @@
   <h2>Profile</h2>
 
   <form [formGroup]="form" (ngSubmit)="save()">
-    <div>
-      <label for="fullName">Full name</label>
-      <input id="fullName" formControlName="fullName" placeholder="Enter your full name" title="Full name" />
-    </div>
+    <mat-form-field class="form-field">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fullName" placeholder="Enter your full name" />
+    </mat-form-field>
 
-    <div>
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" disabled placeholder="Your email address" title="Email" />
-    </div>
+    <mat-form-field class="form-field">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Your email address" readonly />
+    </mat-form-field>
 
-    <div>
-      <label for="phoneNumber">Phone</label>
-      <input id="phoneNumber" formControlName="phoneNumber" placeholder="Enter your phone number" title="Phone" />
-    </div>
+    <mat-form-field class="form-field">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" />
+    </mat-form-field>
 
-    <button type="submit">Save</button>
+    <button mat-raised-button color="primary" type="submit">Save</button>
   </form>
 </div>

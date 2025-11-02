@@ -7,7 +7,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.html',
+  templateUrl: './login.component.html',
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {

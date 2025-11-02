@@ -3,71 +3,44 @@
     <h2>Create Account</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input
-          id="fullName"
-          formControlName="fullName"
-          placeholder="Enter your full name"
-          title="Full Name"
-          [class.error]="form.get('fullName')?.invalid && form.get('fullName')?.touched"
-        />
-        <div *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched" class="field-error">
+      <mat-form-field class="form-field">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" placeholder="Enter your full name" />
+        <mat-error *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
           <span *ngIf="form.get('fullName')?.errors?.['required']">Full name is required</span>
           <span *ngIf="form.get('fullName')?.errors?.['minlength']">Full name must be at least 3 characters</span>
-        </div>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          formControlName="email"
-          type="email"
-          placeholder="Enter your email"
-          title="Email"
-          [class.error]="form.get('email')?.invalid && form.get('email')?.touched"
-        />
-        <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="field-error">
+      <mat-form-field class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+        <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
           <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
           <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
-        </div>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          formControlName="password"
-          type="password"
-          placeholder="Enter your password"
-          title="Password"
-          [class.error]="form.get('password')?.invalid && form.get('password')?.touched"
-        />
-        <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="field-error">
+      <mat-form-field class="form-field">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+        <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
           <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
           <span *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
-        </div>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          formControlName="confirmPassword"
-          type="password"
-          placeholder="Confirm your password"
-          title="Confirm Password"
-          [class.error]="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched"
-        />
-        <div *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched" class="field-error">
+      <mat-form-field class="form-field">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
+        <mat-error *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">
           <span *ngIf="form.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
-        </div>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
       <div *ngIf="error" class="error-message">{{ error }}</div>
 
-      <button type="submit" [disabled]="loading || form.invalid">
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
         <span *ngIf="loading">Creating Account...</span>
         <span *ngIf="!loading">Create Account</span>
       </button>
