@@ -1,1 +1,101 @@
-<p>car-form works!</p>
+@if (success) {
+  <div class="success-screen">
+    <div class="success-icon">✅</div>
+    <h2>Car Listed Successfully!</h2>
+    <p>Redirecting to listings…</p>
+  </div>
+} @else {
+  <div class="form-page">
+    <div class="form-header">
+      <a routerLink="/cars" class="back-link">← Back to listings</a>
+      <h1 class="form-title">🚗 List Your Car</h1>
+      <p class="form-sub">Fill in the details below to add your car to the community</p>
+    </div>
+
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
+
+      <!-- Make & Model -->
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label">Make *</label>
+          <input class="field-input" formControlName="make" placeholder="e.g. Toyota" />
+          @if (isInvalid('make')) { <span class="err">Make is required</span> }
+        </div>
+        <div class="field-group">
+          <label class="field-label">Model *</label>
+          <input class="field-input" formControlName="model" placeholder="e.g. Supra" />
+          @if (isInvalid('model')) { <span class="err">Model is required</span> }
+        </div>
+      </div>
+
+      <!-- Year & Price -->
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label">Year *</label>
+          <input class="field-input" type="number" formControlName="year" placeholder="2023" />
+          @if (isInvalid('year')) { <span class="err">Valid year required</span> }
+        </div>
+        <div class="field-group">
+          <label class="field-label">Price (USD) *</label>
+          <input class="field-input" type="number" formControlName="price" placeholder="45000" />
+          @if (isInvalid('price')) { <span class="err">Price is required</span> }
+        </div>
+      </div>
+
+      <!-- Mileage & Colour -->
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label">Mileage (km) *</label>
+          <input class="field-input" type="number" formControlName="mileage" placeholder="15000" />
+          @if (isInvalid('mileage')) { <span class="err">Mileage is required</span> }
+        </div>
+        <div class="field-group">
+          <label class="field-label">Colour *</label>
+          <input class="field-input" formControlName="color" placeholder="e.g. Pearl White" />
+          @if (isInvalid('color')) { <span class="err">Colour is required</span> }
+        </div>
+      </div>
+
+      <!-- Fuel Type & Transmission -->
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label">Fuel Type *</label>
+          <select class="field-select" formControlName="fuelType">
+            <option value="petrol">⛽ Petrol</option>
+            <option value="diesel">🛢️ Diesel</option>
+            <option value="hybrid">🌿 Hybrid</option>
+            <option value="electric">⚡ Electric</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Transmission *</label>
+          <select class="field-select" formControlName="transmission">
+            <option value="automatic">Automatic</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Image URL -->
+      <div class="field-group">
+        <label class="field-label">Image URL</label>
+        <input class="field-input" formControlName="image" placeholder="https://…" />
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <label class="field-label">Description *</label>
+        <textarea class="field-textarea" formControlName="description" rows="4"
+          placeholder="Describe your car — condition, features, history…"></textarea>
+        @if (isInvalid('description')) {
+          <span class="err">Description must be at least 20 characters</span>
+        }
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        @if (loading) { <span class="spinner"></span> Listing… }
+        @else { 🚗 List My Car }
+      </button>
+    </form>
+  </div>
+}

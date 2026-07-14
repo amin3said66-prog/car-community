@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CarService } from '../car.service';
 import { Car } from '../../models/car.model';
-import './car-details.scss';
 
 @Component({
   selector: 'app-car-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './car-details.html',
   styleUrls: ['./car-details.scss']
 })
@@ -26,12 +25,12 @@ export class CarDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       const carId = params['id'];
       if (carId) {
-        this.carService.getCarById(carId).subscribe({
-          next: (car) => {
+        this.carService.getById(carId).subscribe({
+          next: (car: Car) => {
             this.car = car;
             this.loading = false;
           },
-          error: (err) => {
+          error: (err: unknown) => {
             console.error('Failed to load car:', err);
             this.loading = false;
           }

@@ -1,0 +1,79 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">📝 Community Posts</h1>
+    <p class="page-sub">{{ filtered.length }} posts from car enthusiasts</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" placeholder="Search posts…"
+      [(ngModel)]="search" (ngModelChange)="applyFilters()" />
+  </div>
+  <div class="cat-tabs">
+    @for (cat of categories; track cat) {
+      <button class="cat-tab" [class.active]="activeCategory === cat" (click)="setCategory(cat)">
+        @if (cat === '') { All }
+        @else { {{ catIcon(cat) }} {{ cat }} }
+      </button>
+    }
+  </div>
+</div>
+
+<!-- Posts List -->
+<div class="posts-list">
+  @if (filtered.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>No posts found</h3>
+      <p>Try a different search or category</p>
+    </div>
+  }
+
+  @for (post of filtered; track post.id) {
+    <article class="post-card">
+      <div class="post-main">
+        <div class="post-meta-top">
+          <img [src]="post.authorImage" [alt]="post.author" class="author-avatar" />
+          <div>
+            <div class="author-name">{{ post.author }}</div>
+            <div class="post-date">{{ post.createdAt | date:'mediumDate' }}</div>
+          </div>
+          <span class="cat-badge {{ post.category }}">{{ catIcon(post.category) }} {{ post.category }}</span>
+        </div>
+
+        <h2 class="post-title">{{ post.title }}</h2>
+        <p class="post-content">{{ post.content | slice:0:200 }}…</p>
+
+        <div class="post-stats">
+          <button class="stat-btn" (click)="likePost(post, $event)">❤️ {{ post.likes }} likes</button>
+          <span class="stat">💬 {{ post.comments.length }} comments</span>
+          @if (post.views) { <span class="stat">👁 {{ post.views | number }} views</span> }
+          @if (post.shares) { <span class="stat">↗ {{ post.shares }} shares</span> }
+        </div>
+
+        @if (post.comments.length > 0) {
+          <div class="comments-preview">
+            @for (comment of post.comments.slice(0, 2); track comment.id) {
+              <div class="comment-item">
+                <img [src]="comment.authorImage" [alt]="comment.author" class="comment-avatar" />
+                <div class="comment-bubble">
+                  <span class="comment-author">{{ comment.author }}</span>
+                  <span class="comment-text">{{ comment.content }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (post.image) {
+        <div class="post-img-wrap">
+          <img [src]="post.image" [alt]="post.title" class="post-img" />
+        </div>
+      }
+    </article>
+  }
+</div>

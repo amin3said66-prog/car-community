@@ -1,1 +1,100 @@
-<p>car-details works!</p>
+@if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading car details…</p>
+  </div>
+}
+
+@if (!loading && !car) {
+  <div class="not-found">
+    <div class="not-found-icon">🚗</div>
+    <h2>Car not found</h2>
+    <p>This car listing may have been removed.</p>
+    <a routerLink="/cars" class="back-btn">← Back to listings</a>
+  </div>
+}
+
+@if (!loading && car) {
+  <div class="detail-wrap">
+    <!-- Back link -->
+    <a routerLink="/cars" class="back-link">← Back to listings</a>
+
+    <div class="detail-grid">
+      <!-- Left: image + owner -->
+      <div class="left-col">
+        <div class="img-wrap">
+          <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="detail-img" />
+          @if (car.featured) {
+            <span class="featured-badge">⭐ Featured</span>
+          }
+        </div>
+
+        <div class="owner-card">
+          <img [src]="car.ownerImage" [alt]="car.owner" class="owner-img" />
+          <div>
+            <div class="owner-name">{{ car.owner }}</div>
+            <div class="owner-label">Owner / Seller</div>
+          </div>
+          <a href="mailto:owner@example.com" class="contact-btn">Contact</a>
+        </div>
+      </div>
+
+      <!-- Right: details -->
+      <div class="right-col">
+        <div class="make-model">{{ car.year }} {{ car.make }} {{ car.model }}</div>
+        <div class="price">\${{ car.price | number }}</div>
+
+        <div class="badges">
+          <span class="badge">{{ car.fuelType }}</span>
+          <span class="badge">{{ car.transmission }}</span>
+          <span class="badge">{{ car.color }}</span>
+          <span class="badge">{{ car.mileage | number }} km</span>
+        </div>
+
+        <div class="rating-row">
+          <span class="stars">★★★★★</span>
+          <span class="rating-val">{{ car.rating }} / 5.0</span>
+        </div>
+
+        <h3 class="section-label">Description</h3>
+        <p class="description">{{ car.description }}</p>
+
+        <div class="specs-grid">
+          <div class="spec-item">
+            <span class="spec-label">Fuel Type</span>
+            <span class="spec-val">{{ car.fuelType | titlecase }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Transmission</span>
+            <span class="spec-val">{{ car.transmission | titlecase }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Year</span>
+            <span class="spec-val">{{ car.year }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Mileage</span>
+            <span class="spec-val">{{ car.mileage | number }} km</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Colour</span>
+            <span class="spec-val">{{ car.color }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Listed</span>
+            <span class="spec-val">{{ car.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        @if (car.reviews && car.reviews.length > 0) {
+          <h3 class="section-label">Reviews ({{ car.reviews.length }})</h3>
+          <div class="reviews-list">
+            @for (review of car.reviews; track review) {
+              <div class="review-item">💬 {{ review }}</div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
