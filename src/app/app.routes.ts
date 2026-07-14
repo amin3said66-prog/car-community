@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: '/cars', pathMatch: 'full' },
   { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) },
   { path: 'cars', loadChildren: () => import('./cars/cars-module').then(m => m.CarsModule) },
@@ -10,10 +9,3 @@ const routes: Routes = [
   { path: 'events', loadChildren: () => import('./events/events-module').then(m => m.EventsModule) },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-module').then(m => m.DashboardModule) },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
-

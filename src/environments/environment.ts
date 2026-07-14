@@ -9,5 +9,5 @@ export const environment = {
     // OTLP HTTP endpoint (collector)
     otlpEndpoint: 'http://localhost:4318/v1/traces'
   }
-};
+} as const;
 

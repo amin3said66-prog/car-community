@@ -57,4 +57,12 @@ export class AuthService {
   changePassword(payload: ChangePasswordRequest): Observable<void> {
     return this.http.post<void>(`${this.base}/change-password`, payload);
   }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
+  updateProfile(data: any): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.base}/profile`, data);
+  }
 }

@@ -24,12 +24,6 @@ liberapay:
 issuehunt: 
   MostafaSaid            # Your IssueHunt username
 
-lfx_crowdfunding: 
-  carcommunity-project   # Example: LFX Crowdfunding project name
-
-polar: 
-  carcommunity           # Your Polar username
-
 buy_me_a_coffee: 
   mssaid356p            # Your Buy Me a Coffee username
 
@@ -37,5 +31,5 @@ thanks_dev:
   MostafaSaid            # Your thanks.dev username
 
 custom: 
-  - 'https://yourcompany.com/sponsor'
-  - 'https://yourportfolio.com/support'
+  - 'https://we3ds.com/sponsor'
+  - 'https://msaid-portfolio.web.app/support'

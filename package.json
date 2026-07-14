@@ -1,12 +1,17 @@
 {
   "name": "car-community",
   "version": "0.0.0",
+  "description": "Car Community - Secure Angular Application",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --host 0.0.0.0 --poll 2000",
+    "build": "ng build --configuration production",
+    "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "audit": "npm audit",
+    "audit:fix": "npm audit fix --legacy-peer-deps",
+    "security:check": "npm audit --audit-level=moderate"
   },
   "prettier": {
     "printWidth": 100,
@@ -22,38 +27,47 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/compiler": "^20.3.0",
-    "@angular/core": "^20.3.0",
-    "@angular/forms": "^20.3.0",
-    "@angular/material": "^20.2.11",
-    "@angular/platform-browser": "^20.3.0",
-    "@angular/router": "^20.3.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "@opentelemetry/api": "^1.4.0",
-    "@opentelemetry/sdk-trace-web": "^1.4.0",
-    "@opentelemetry/sdk-trace-base": "^1.4.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^1.18.0",
-    "@opentelemetry/instrumentation": "^0.36.0",
-    "@opentelemetry/instrumentation-fetch": "^0.36.0",
-    "@opentelemetry/instrumentation-xml-http-request": "^0.36.0",
-    "@opentelemetry/instrumentation-document-load": "^0.36.0",
-    "@opentelemetry/instrumentation-user-interaction": "^0.36.0",
-    "lottie-web": "^5.12.2"
+    "@angular/animations": "^20.3.4",
+    "@angular/cdk": "^20.2.14",
+    "@angular/common": "^20.3.4",
+    "@angular/compiler": "^20.3.4",
+    "@angular/core": "^20.3.4",
+    "@angular/forms": "^20.3.4",
+    "@angular/material": "^20.2.12",
+    "@angular/platform-browser": "^20.3.4",
+    "@angular/platform-browser-dynamic": "^20.3.4",
+    "@angular/router": "^20.3.4",
+    "lottie-web": "^5.12.2",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.6.3",
+    "zone.js": "^0.14.5"
   },
   "devDependencies": {
-    "@angular/build": "^20.3.3",
-    "@angular/cli": "^20.3.3",
-    "@angular/compiler-cli": "^20.3.0",
+    "@angular/build": "^20.3.4",
+    "@angular/cli": "^20.3.4",
+    "@angular/compiler-cli": "^20.3.4",
     "@types/jasmine": "~5.1.0",
+    "autoprefixer": "^10.5.2",
     "jasmine-core": "~5.9.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
+    "karma": "^6.4.3",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.5.19",
+    "tailwindcss": "^3.4.1",
     "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "npm": ">=9.6.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mostafa-SAID7/car-community.git"
   }
 }
