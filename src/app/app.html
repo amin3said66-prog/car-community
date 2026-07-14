@@ -1,1 +1,43 @@
-<router-outlet />
+@if (showShell) {
+  <div class="shell">
+    <!-- Top Nav -->
+    <nav class="shell-nav">
+      <a routerLink="/" class="brand">🏎️ CarCommunity</a>
+
+      <div class="nav-links">
+        @for (link of navLinks; track link.path) {
+          <a [routerLink]="link.path" routerLinkActive="active" class="nav-link">
+            <span>{{ link.icon }}</span> {{ link.label }}
+          </a>
+        }
+      </div>
+
+      <div class="nav-actions">
+        <a routerLink="/auth/login" class="btn-outline">Login</a>
+        <a routerLink="/cars/new" class="btn-primary">+ List a Car</a>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="hamburger" (click)="menuOpen = !menuOpen">☰</button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    @if (menuOpen) {
+      <div class="mobile-menu">
+        @for (link of navLinks; track link.path) {
+          <a [routerLink]="link.path" routerLinkActive="active"
+             class="mobile-link" (click)="menuOpen = false">
+            {{ link.icon }} {{ link.label }}
+          </a>
+        }
+        <a routerLink="/auth/login" class="mobile-link" (click)="menuOpen = false">🔐 Login</a>
+      </div>
+    }
+
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </div>
+} @else {
+  <router-outlet />
+}
