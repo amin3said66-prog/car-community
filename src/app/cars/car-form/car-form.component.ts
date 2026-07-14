@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CarService } from '../car.service';
-import './car-form.scss';
 
 @Component({
   selector: 'app-car-form',
