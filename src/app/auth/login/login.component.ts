@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { LoginRequest } from '../models/auth.models';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
@@ -24,7 +25,8 @@ import { LoginRequest } from '../models/auth.models';
     MatFormFieldModule,
     MatCardModule
   ],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   form: FormGroup;
