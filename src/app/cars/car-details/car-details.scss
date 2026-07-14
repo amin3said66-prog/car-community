@@ -1,9 +1,17 @@
 .loading-state {
   text-align: center;
-  padding: 5rem 2rem;
+  padding: 2rem 1rem;
   color: rgba(255,255,255,0.5);
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 640px) {
+    padding: 5rem 2rem;
+  }
+
   .spinner {
-    width: 48px; height: 48px;
+    width: 48px; 
+    height: 48px;
     border: 3px solid rgba(255,255,255,0.1);
     border-top-color: #a855f7;
     border-radius: 50%;
@@ -16,10 +24,25 @@
 
 .not-found {
   text-align: center;
-  padding: 5rem 2rem;
+  padding: 2rem 1rem;
   color: rgba(255,255,255,0.5);
-  .not-found-icon { font-size: 3rem; margin-bottom: 1rem; }
-  h2 { color: white; margin: 0 0 0.5rem; }
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 640px) {
+    padding: 5rem 2rem;
+  }
+
+  .not-found-icon { 
+    font-size: 3rem; 
+    margin-bottom: 1rem; 
+  }
+
+  h2 { 
+    color: white; 
+    margin: 0 0 0.5rem; 
+    word-break: break-word;
+  }
 }
 
 .back-link, .back-btn {
@@ -32,13 +55,23 @@
   &:hover { color: white; }
 }
 
-.detail-wrap { max-width: 1100px; margin: 0 auto; }
+.detail-wrap { 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
 
 .detail-grid {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
-  @media (max-width: 768px) { grid-template-columns: 1fr; }
+  width: 100%;
+
+  @media (min-width: 1024px) { 
+    grid-template-columns: 1fr 1.1fr;
+  }
 }
 
 .img-wrap {
@@ -46,9 +79,14 @@
   border-radius: 1rem;
   overflow: hidden;
   aspect-ratio: 4/3;
+  width: 100%;
 }
 
-.detail-img { width: 100%; height: 100%; object-fit: cover; }
+.detail-img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
 
 .featured-badge {
   position: absolute;
@@ -71,11 +109,35 @@
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 0.875rem;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
-.owner-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(168,85,247,0.4); }
-.owner-name { font-weight: 600; color: white; font-size: 0.9rem; }
-.owner-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+.owner-img { 
+  width: 48px; 
+  height: 48px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 2px solid rgba(168,85,247,0.4);
+  flex-shrink: 0;
+}
+
+.owner-name { 
+  font-weight: 600; 
+  color: white; 
+  font-size: 0.9rem; 
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.owner-label { 
+  font-size: 0.75rem; 
+  color: rgba(255,255,255,0.4);
+  flex-basis: 100%;
+}
 
 .contact-btn {
   margin-left: auto;
@@ -86,15 +148,45 @@
   text-decoration: none;
   font-size: 0.8rem;
   font-weight: 600;
+  flex-shrink: 0;
   &:hover { opacity: 0.9; }
 }
 
-.right-col {}
+.right-col {
+  width: 100%;
+}
 
-.make-model { font-size: 1.75rem; font-weight: 700; color: white; margin-bottom: 0.25rem; }
-.price { font-size: 2rem; font-weight: 700; color: #22d3ee; margin-bottom: 1rem; }
+.make-model { 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: white; 
+  margin-bottom: 0.25rem;
+  word-break: break-word;
 
-.badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  @media (min-width: 640px) {
+    font-size: 1.75rem;
+  }
+}
+
+.price { 
+  font-size: 1.75rem; 
+  font-weight: 700; 
+  color: #22d3ee; 
+  margin-bottom: 1rem;
+
+  @media (min-width: 640px) {
+    font-size: 2rem;
+  }
+}
+
+.badges { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 0.5rem; 
+  margin-bottom: 1rem; 
+  width: 100%;
+}
+
 .badge {
   padding: 0.25rem 0.75rem;
   background: rgba(255,255,255,0.08);
@@ -103,21 +195,56 @@
   font-size: 0.8rem;
   color: rgba(255,255,255,0.7);
   text-transform: capitalize;
+  white-space: nowrap;
 }
 
-.rating-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem; }
-.stars { color: #f59e0b; font-size: 1rem; }
-.rating-val { color: rgba(255,255,255,0.6); font-size: 0.875rem; }
+.rating-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  margin-bottom: 1.25rem; 
+  flex-wrap: wrap;
+}
 
-.section-label { font-size: 1rem; font-weight: 600; color: white; margin: 1.5rem 0 0.75rem; }
-.description { color: rgba(255,255,255,0.65); line-height: 1.7; font-size: 0.9rem; }
+.stars { 
+  color: #f59e0b; 
+  font-size: 1rem; 
+}
+
+.rating-val { 
+  color: rgba(255,255,255,0.6); 
+  font-size: 0.875rem; 
+}
+
+.section-label { 
+  font-size: 1rem; 
+  font-weight: 600; 
+  color: white; 
+  margin: 1.5rem 0 0.75rem; 
+  word-break: break-word;
+}
+
+.description { 
+  color: rgba(255,255,255,0.65); 
+  line-height: 1.7; 
+  font-size: 0.9rem; 
+  word-break: break-word;
+}
 
 .specs-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
   margin-top: 1.25rem;
-  @media (max-width: 480px) { grid-template-columns: repeat(2, 1fr); }
+  width: 100%;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 480px) { 
+    grid-template-columns: 1fr;
+  }
 }
 
 .spec-item {
@@ -125,12 +252,33 @@
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 0.75rem;
+  word-break: break-word;
 }
 
-.spec-label { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px; }
-.spec-val { font-size: 0.875rem; font-weight: 600; color: white; text-transform: capitalize; }
+.spec-label { 
+  display: block; 
+  font-size: 0.7rem; 
+  color: rgba(255,255,255,0.4); 
+  margin-bottom: 0.25rem; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+}
 
-.reviews-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.spec-val { 
+  font-size: 0.875rem; 
+  font-weight: 600; 
+  color: white; 
+  text-transform: capitalize; 
+  word-break: break-word;
+}
+
+.reviews-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.5rem; 
+  width: 100%;
+}
+
 .review-item {
   padding: 0.75rem 1rem;
   background: rgba(255,255,255,0.05);
@@ -138,4 +286,5 @@
   border-radius: 0.75rem;
   font-size: 0.875rem;
   color: rgba(255,255,255,0.65);
+  word-break: break-word;
 }
