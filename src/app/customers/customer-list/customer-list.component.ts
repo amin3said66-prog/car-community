@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MOCK_USERS } from '../../data/mock-users';
 import { User } from '../../models/user.model';
@@ -7,7 +8,7 @@ import { User } from '../../models/user.model';
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss']
 })

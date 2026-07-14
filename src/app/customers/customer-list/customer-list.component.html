@@ -35,7 +35,7 @@
 
 <div class="members-grid">
   @for (user of filtered; track user.id) {
-    <div class="member-card">
+    <a [routerLink]="['/customers', user.id]" class="member-card">
       <div class="member-top">
         <div class="avatar-wrap">
           <img [src]="user.profileImage" [alt]="user.fullName" class="avatar" />
@@ -79,6 +79,6 @@
           <span class="verified-tag">✓ Verified</span>
         }
       </div>
-    </div>
+    </a>
   }
 </div>

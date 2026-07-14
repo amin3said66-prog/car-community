@@ -1,0 +1,151 @@
+<div class="customer-detail-container">
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (!loading && user) {
+    <!-- Back Button -->
+    <div class="back-nav">
+      <a routerLink="/customers" class="back-link">← Back to Members</a>
+    </div>
+
+    <!-- User Header -->
+    <div class="user-header">
+      <div class="avatar-section">
+        <div class="avatar-wrap">
+          <img [src]="user.profileImage" [alt]="user.fullName" class="avatar" />
+          @if (user.isVerified) {
+            <span class="verified-badge">✓</span>
+          }
+        </div>
+      </div>
+
+      <div class="header-info">
+        <div class="header-top">
+          <div>
+            <h1 class="user-name">{{ user.fullName }}</h1>
+            <p class="username">@{{ user.userName }}</p>
+            <div class="rating">
+              <span class="stars">{{ stars(user.rating) }}</span>
+              <span class="rating-num">{{ user.rating }}/5</span>
+            </div>
+          </div>
+          <button class="follow-btn" [class.following]="isFollowing" (click)="toggleFollow()">
+            @if (isFollowing) {
+              ✓ Following
+            } @else {
+              + Follow
+            }
+          </button>
+        </div>
+
+        <p class="bio">{{ user.bio }}</p>
+
+        <div class="user-meta">
+          <span class="meta-item">
+            📧 {{ user.email }}
+          </span>
+          <span class="meta-item">
+            📍 Joined {{ user.joinDate | date:'mediumDate' }}
+          </span>
+          @if (user.followers !== undefined) {
+            <span class="meta-item">
+              👥 {{ user.followers }} followers
+            </span>
+          }
+          @if (user.following !== undefined) {
+            <span class="meta-item">
+              → {{ user.following }} following
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- User Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🚗</div>
+        <div class="stat-content">
+          <div class="stat-num">{{ user.carsOwned }}</div>
+          <div class="stat-label">Cars Owned</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <div class="stat-content">
+          <div class="stat-num">{{ user.postsCount }}</div>
+          <div class="stat-label">Posts</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🎉</div>
+        <div class="stat-content">
+          <div class="stat-num">{{ user.eventsAttended }}</div>
+          <div class="stat-label">Events Attended</div>
+        </div>
+      </div>
+
+      @if (user.followers !== undefined) {
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <div class="stat-num">{{ user.followers }}</div>
+            <div class="stat-label">Followers</div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Verification & Contact -->
+    <div class="info-cards">
+      <div class="info-card">
+        <h3>📋 Verification Status</h3>
+        @if (user.isVerified) {
+          <div class="verified-info">
+            <span class="verified-checkmark">✓</span>
+            <span>This member is verified</span>
+          </div>
+        } @else {
+          <div class="unverified-info">
+            <span class="unverified-icon">○</span>
+            <span>Not yet verified</span>
+          </div>
+        }
+      </div>
+
+      <div class="info-card">
+        <h3>📞 Contact</h3>
+        <div class="contact-item">
+          <span class="contact-label">Email:</span>
+          <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+        </div>
+        @if (user.phoneNumber) {
+          <div class="contact-item">
+            <span class="contact-label">Phone:</span>
+            <span>{{ user.phoneNumber }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Member Since -->
+    <div class="member-footer">
+      <p>Member since <strong>{{ user.joinDate | date:'longDate' }}</strong></p>
+      @if (user.isVerified) {
+        <p class="verified-member">✓ Verified Community Member</p>
+      }
+    </div>
+  }
+
+  @if (!loading && !user) {
+    <div class="not-found">
+      <div class="not-found-icon">👤</div>
+      <h2>Member not found</h2>
+      <p>The member you're looking for doesn't exist</p>
+      <a routerLink="/customers" class="back-btn">Back to Members</a>
+    </div>
+  }
+</div>

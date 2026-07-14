@@ -33,7 +33,7 @@
 
 <div class="events-grid">
   @for (event of filtered; track event.id) {
-    <div class="event-card">
+    <a [routerLink]="['/events', event.id]" class="event-card">
       <div class="event-img-wrap">
         <img [src]="event.image" [alt]="event.title" class="event-img" />
         <span class="status-badge {{ statusClass(event.status) }}">{{ event.status }}</span>
@@ -86,6 +86,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </a>
   }
 </div>

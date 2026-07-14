@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MOCK_POSTS } from '../../data/mock-posts';
 import { Post } from '../../models/post.model';
@@ -7,7 +8,7 @@ import { Post } from '../../models/post.model';
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
 })

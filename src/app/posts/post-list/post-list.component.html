@@ -33,7 +33,7 @@
   }
 
   @for (post of filtered; track post.id) {
-    <article class="post-card">
+    <a [routerLink]="['/posts', post.id]" class="post-card">
       <div class="post-main">
         <div class="post-meta-top">
           <img [src]="post.authorImage" [alt]="post.author" class="author-avatar" />
@@ -74,6 +74,6 @@
           <img [src]="post.image" [alt]="post.title" class="post-img" />
         </div>
       }
-    </article>
+    </a>
   }
 </div>

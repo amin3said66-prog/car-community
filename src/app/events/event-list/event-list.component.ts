@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MOCK_EVENTS } from '../../data/mock-events';
 import { Event } from '../../models/event.model';
@@ -7,7 +8,7 @@ import { Event } from '../../models/event.model';
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss']
 })

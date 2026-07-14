@@ -1,0 +1,111 @@
+<div class="post-detail-container">
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (!loading && post) {
+    <!-- Back Button -->
+    <div class="back-nav">
+      <a routerLink="/posts" class="back-link">← Back to Posts</a>
+    </div>
+
+    <!-- Post Header -->
+    <div class="post-header">
+      <div class="header-top">
+        <div class="author-info">
+          <img [src]="post.authorImage" [alt]="post.author" class="author-avatar" />
+          <div>
+            <div class="author-name">{{ post.author }}</div>
+            <div class="post-date">{{ post.createdAt | date:'mediumDate' }}</div>
+          </div>
+        </div>
+        <span class="cat-badge {{ post.category }}">{{ catIcon(post.category) }} {{ post.category }}</span>
+      </div>
+
+      <h1 class="post-title">{{ post.title }}</h1>
+    </div>
+
+    <!-- Post Content -->
+    @if (post.image) {
+      <div class="post-image-wrap">
+        <img [src]="post.image" [alt]="post.title" class="post-image" />
+      </div>
+    }
+
+    <div class="post-content-wrap">
+      <p class="post-content">{{ post.content }}</p>
+    </div>
+
+    <!-- Post Stats & Actions -->
+    <div class="post-actions-bar">
+      <div class="actions-group">
+        <button class="action-btn" (click)="likePost()">
+          ❤️ <span>{{ post.likes }} likes</span>
+        </button>
+        <div class="stat-item">
+          💬 <span>{{ post.comments.length }} comments</span>
+        </div>
+        @if (post.views) {
+          <div class="stat-item">
+            👁 <span>{{ post.views | number }} views</span>
+          </div>
+        }
+        @if (post.shares) {
+          <div class="stat-item">
+            ↗ <span>{{ post.shares }} shares</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2 class="comments-title">Comments ({{ post.comments.length }})</h2>
+
+      <!-- Add Comment Form -->
+      <div class="add-comment-form">
+        <img src="https://i.pravatar.cc/150?img=5" alt="You" class="user-avatar" />
+        <div class="form-wrap">
+          <textarea class="comment-input"
+            [(ngModel)]="newComment"
+            placeholder="Share your thoughts…"
+            rows="3"></textarea>
+          <button class="submit-btn" [disabled]="!newComment.trim()" (click)="addComment()">
+            Post Comment
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments List -->
+      @if (post.comments.length > 0) {
+        <div class="comments-list">
+          @for (comment of post.comments; track comment.id) {
+            <div class="comment">
+              <img [src]="comment.authorImage" [alt]="comment.author" class="comment-avatar" />
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">{{ comment.author }}</span>
+                  <span class="comment-time">{{ comment.createdAt | date:'short' }}</span>
+                </div>
+                <p class="comment-text">{{ comment.content }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-comments">
+          <p>No comments yet. Be the first to comment!</p>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading && !post) {
+    <div class="not-found">
+      <div class="not-found-icon">📭</div>
+      <h2>Post not found</h2>
+      <p>The post you're looking for doesn't exist</p>
+      <a routerLink="/posts" class="back-btn">Back to Posts</a>
+    </div>
+  }
+</div>

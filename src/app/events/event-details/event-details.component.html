@@ -1,0 +1,130 @@
+<div class="event-detail-container">
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (!loading && event) {
+    <!-- Back Button -->
+    <div class="back-nav">
+      <a routerLink="/events" class="back-link">← Back to Events</a>
+    </div>
+
+    <!-- Event Header -->
+    <div class="event-header">
+      <div class="event-img-wrap">
+        <img [src]="event.image" [alt]="event.title" class="event-image" />
+        <div class="overlay-badges">
+          <span class="status-badge {{ statusClass(event.status) }}">{{ event.status }}</span>
+          <span class="cat-badge-img">{{ catIcon(event.category) }}</span>
+        </div>
+      </div>
+
+      <div class="header-content">
+        <h1 class="event-title">{{ event.title }}</h1>
+        <p class="event-description">{{ event.description }}</p>
+
+        <div class="event-meta-top">
+          <div class="meta-item">
+            <span class="meta-icon">📅</span>
+            <div>
+              <div class="meta-label">Date</div>
+              <div class="meta-value">{{ event.date | date:'longDate' }}</div>
+            </div>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">⏰</span>
+            <div>
+              <div class="meta-label">Time</div>
+              <div class="meta-value">{{ event.time }}</div>
+            </div>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">📍</span>
+            <div>
+              <div class="meta-label">Location</div>
+              <div class="meta-value">{{ event.location }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-organizer">
+          <img [src]="event.organizerImage" [alt]="event.organizer" class="organizer-avatar" />
+          <div>
+            <div class="organizer-label">Organized by</div>
+            <div class="organizer-name">{{ event.organizer }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Details -->
+    <div class="event-details-grid">
+      <div class="detail-card">
+        <h3>📊 Attendance</h3>
+        <div class="progress-bar">
+          <div class="progress-fill"
+            [style.width.%]="(event.attendees.length / event.maxAttendees) * 100">
+          </div>
+        </div>
+        <div class="attendance-text">
+          <strong>{{ event.attendees.length }} / {{ event.maxAttendees }}</strong> attending
+          · <strong>{{ spotsLeft() }} spots</strong> left
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h3>💰 Pricing</h3>
+        @if (event.price === 0) {
+          <div class="price-tag free">Free Entry</div>
+        } @else {
+          <div class="price-tag paid">
+            ${{ event.price }}
+            <span class="price-label">per ticket</span>
+          </div>
+        }
+      </div>
+
+      <div class="detail-card">
+        <h3>📂 Category</h3>
+        <div class="category-tag">
+          {{ catIcon(event.category) }} {{ event.category | titlecase }}
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h3>🎟️ Status</h3>
+        <div class="status-tag {{ statusClass(event.status) }}">
+          {{ event.status | titlecase }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="action-section">
+      @if (event.status === 'upcoming') {
+        @if (spotsLeft() > 0) {
+          <button class="action-btn" [class.attending]="isAttending" (click)="toggleAttend()">
+            @if (isAttending) {
+              ✓ Attending
+            } @else {
+              🎫 Join Event
+            }
+          </button>
+        } @else {
+          <button class="action-btn disabled" disabled>Event Full</button>
+        }
+      } @else {
+        <button class="action-btn disabled" disabled>{{ event.status | titlecase }}</button>
+      }
+    </div>
+  }
+
+  @if (!loading && !event) {
+    <div class="not-found">
+      <div class="not-found-icon">📭</div>
+      <h2>Event not found</h2>
+      <p>The event you're looking for doesn't exist</p>
+      <a routerLink="/events" class="back-btn">Back to Events</a>
+    </div>
+  }
+</div>
