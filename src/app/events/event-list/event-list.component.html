@@ -1,0 +1,91 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">🎉 Events</h1>
+    <p class="page-sub">{{ filtered.length }} events for car enthusiasts</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <div class="search-wrap">
+    <span class="si">🔍</span>
+    <input class="search-input" type="text" placeholder="Search events or locations…"
+      [(ngModel)]="search" (ngModelChange)="applyFilters()" />
+  </div>
+  <div class="cat-tabs">
+    @for (cat of categories; track cat) {
+      <button class="cat-tab" [class.active]="activeCategory === cat" (click)="setCategory(cat)">
+        @if (cat === '') { All }
+        @else { {{ catIcon(cat) }} {{ cat }} }
+      </button>
+    }
+  </div>
+</div>
+
+<!-- Events Grid -->
+@if (filtered.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">📅</div>
+    <h3>No events found</h3>
+    <p>Try adjusting your search or filters</p>
+  </div>
+}
+
+<div class="events-grid">
+  @for (event of filtered; track event.id) {
+    <div class="event-card">
+      <div class="event-img-wrap">
+        <img [src]="event.image" [alt]="event.title" class="event-img" />
+        <span class="status-badge {{ statusClass(event.status) }}">{{ event.status }}</span>
+        <span class="cat-badge-img">{{ catIcon(event.category) }}</span>
+      </div>
+
+      <div class="event-body">
+        <h2 class="event-title">{{ event.title }}</h2>
+        <p class="event-desc">{{ event.description | slice:0:120 }}…</p>
+
+        <div class="event-details">
+          <div class="detail-row">
+            <span class="detail-icon">📅</span>
+            <span>{{ event.date | date:'mediumDate' }} at {{ event.time }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">📍</span>
+            <span>{{ event.location }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">👤</span>
+            <span>{{ event.organizer }}</span>
+          </div>
+        </div>
+
+        <div class="event-footer">
+          <div class="attendees-info">
+            <div class="progress-bar">
+              <div class="progress-fill"
+                [style.width.%]="(event.attendees.length / event.maxAttendees) * 100">
+              </div>
+            </div>
+            <div class="attendee-text">
+              {{ event.attendees.length }}/{{ event.maxAttendees }} attending
+              · {{ spotsLeft(event) }} spots left
+            </div>
+          </div>
+
+          <div class="event-actions">
+            <div class="event-price">
+              @if (event.price === 0) { <span class="free">Free</span> }
+              @else { <span class="price">\${{ event.price }}</span> }
+            </div>
+            @if (event.status === 'upcoming' && spotsLeft(event) > 0) {
+              <button class="join-btn" (click)="join(event, $event)">Join</button>
+            }
+            @if (spotsLeft(event) === 0) {
+              <span class="full-badge">Full</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

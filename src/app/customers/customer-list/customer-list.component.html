@@ -1,0 +1,84 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">👥 Community Members</h1>
+    <p class="page-sub">{{ filtered.length }} of {{ users.length }} members</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <div class="search-wrap">
+    <span class="si">🔍</span>
+    <input class="search-input" type="text" placeholder="Search members…"
+      [(ngModel)]="search" (ngModelChange)="applyFilters()" />
+  </div>
+  <button class="toggle-btn" [class.active]="verifiedOnly" (click)="toggleVerified()">
+    ✓ Verified only
+  </button>
+</div>
+
+<!-- Stats bar -->
+<div class="meta-bar">
+  <span>{{ verifiedCount }} verified</span>
+  <span>{{ totalCarsOwned }} cars owned total</span>
+  <span>{{ totalPosts }} posts total</span>
+</div>
+
+<!-- Members Grid -->
+@if (filtered.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <h3>No members found</h3>
+    <p>Try adjusting your search</p>
+  </div>
+}
+
+<div class="members-grid">
+  @for (user of filtered; track user.id) {
+    <div class="member-card">
+      <div class="member-top">
+        <div class="avatar-wrap">
+          <img [src]="user.profileImage" [alt]="user.fullName" class="avatar" />
+          @if (user.isVerified) {
+            <span class="verified-dot">✓</span>
+          }
+        </div>
+        <div class="member-info">
+          <div class="full-name">{{ user.fullName }}</div>
+          <div class="username">@{{ user.userName }}</div>
+          <div class="stars">{{ stars(user.rating) }} <span class="rating-num">{{ user.rating }}</span></div>
+        </div>
+      </div>
+
+      <p class="bio">{{ user.bio }}</p>
+
+      <div class="stats-row">
+        <div class="stat-block">
+          <div class="stat-num">{{ user.carsOwned }}</div>
+          <div class="stat-lbl">Cars</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">{{ user.postsCount }}</div>
+          <div class="stat-lbl">Posts</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">{{ user.eventsAttended }}</div>
+          <div class="stat-lbl">Events</div>
+        </div>
+        @if (user.followers !== undefined) {
+          <div class="stat-block">
+            <div class="stat-num">{{ user.followers }}</div>
+            <div class="stat-lbl">Followers</div>
+          </div>
+        }
+      </div>
+
+      <div class="member-footer">
+        <span class="join-date">Joined {{ user.joinDate | date:'mediumDate' }}</span>
+        @if (user.isVerified) {
+          <span class="verified-tag">✓ Verified</span>
+        }
+      </div>
+    </div>
+  }
+</div>
