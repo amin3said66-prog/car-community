@@ -21,6 +21,8 @@ export class AppComponent {
     { path: '/dashboard', label: 'Dashboard', icon: 'bar_chart' },
   ];
 
+  readonly currentYear = new Date().getFullYear();
+
   get showShell(): boolean {
     const url = this.router.url;
     return !url.startsWith('/auth') && url !== '/';

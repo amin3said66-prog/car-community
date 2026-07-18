@@ -1,111 +1,114 @@
-<div class="post-detail-container">
+<div class="max-w-3xl mx-auto py-2">
   @if (loading) {
-    <div class="loading">Loading...</div>
+    <div class="text-center py-16 text-white/70">Loading…</div>
   }
 
   @if (!loading && post) {
-    <!-- Back Button -->
-    <div class="back-nav">
-      <a routerLink="/posts" class="back-link">← Back to Posts</a>
+    <!-- Back -->
+    <div class="mb-8">
+      <a routerLink="/posts" class="back-link">
+        <mat-icon>arrow_back</mat-icon> Back to Posts
+      </a>
     </div>
 
-    <!-- Post Header -->
-    <div class="post-header">
-      <div class="header-top">
-        <div class="author-info">
-          <img [src]="post.authorImage" [alt]="post.author" class="author-avatar" />
+    <!-- Post header -->
+    <div class="mb-8 pb-6 border-b border-white/10">
+      <div class="flex justify-between items-start gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-3 flex-1 min-w-0">
+          <img imgFallback="avatar" [src]="post.authorImage" [alt]="post.author"
+            class="w-12 h-12 rounded-full object-cover shrink-0" />
           <div>
-            <div class="author-name">{{ post.author }}</div>
-            <div class="post-date">{{ post.createdAt | date:'mediumDate' }}</div>
+            <div class="font-semibold text-white">{{ post.author }}</div>
+            <div class="text-[0.85rem] text-white/60">{{ post.createdAt | date:'mediumDate' }}</div>
           </div>
         </div>
-        <span class="cat-badge {{ post.category }}">{{ catIcon(post.category) }} {{ post.category }}</span>
+        <span class="cat-badge {{ post.category }} shrink-0">{{ catIcon(post.category) }} {{ post.category }}</span>
       </div>
-
-      <h1 class="post-title">{{ post.title }}</h1>
+      <h1 class="text-3xl sm:text-[2rem] font-bold text-white m-0 leading-snug">{{ post.title }}</h1>
     </div>
 
-    <!-- Post Content -->
+    <!-- Image -->
     @if (post.image) {
-      <div class="post-image-wrap">
-        <img [src]="post.image" [alt]="post.title" class="post-image" />
+      <div class="my-8 rounded-xl overflow-hidden max-h-[500px]">
+        <img imgFallback="car" [src]="post.image" [alt]="post.title" class="w-full h-auto block object-cover" />
       </div>
     }
 
-    <div class="post-content-wrap">
-      <p class="post-content">{{ post.content }}</p>
+    <!-- Content -->
+    <div class="my-8 p-6 bg-white/[.05] rounded-xl border border-white/10">
+      <p class="text-white/90 leading-[1.8] m-0 text-base whitespace-pre-wrap break-words">{{ post.content }}</p>
     </div>
 
-    <!-- Post Stats & Actions -->
-    <div class="post-actions-bar">
-      <div class="actions-group">
-        <button class="action-btn" (click)="likePost()">
+    <!-- Stats bar -->
+    <div class="flex gap-8 p-6 bg-white/[.05] rounded-xl my-8 flex-wrap">
+      <div class="flex gap-8 flex-wrap">
+        <button class="flex items-center gap-2 bg-transparent border-0 text-white/70 cursor-pointer text-[0.95rem] transition-colors hover:text-red-400"
+          (click)="likePost()">
           ❤️ <span>{{ post.likes }} likes</span>
         </button>
-        <div class="stat-item">
+        <div class="flex items-center gap-2 text-white/70 text-[0.95rem]">
           💬 <span>{{ post.comments.length }} comments</span>
         </div>
         @if (post.views) {
-          <div class="stat-item">
+          <div class="flex items-center gap-2 text-white/70 text-[0.95rem]">
             👁 <span>{{ post.views | number }} views</span>
           </div>
         }
         @if (post.shares) {
-          <div class="stat-item">
+          <div class="flex items-center gap-2 text-white/70 text-[0.95rem]">
             ↗ <span>{{ post.shares }} shares</span>
           </div>
         }
       </div>
     </div>
 
-    <!-- Comments Section -->
-    <div class="comments-section">
-      <h2 class="comments-title">Comments ({{ post.comments.length }})</h2>
+    <!-- Comments -->
+    <div class="mt-12">
+      <h2 class="text-2xl font-semibold text-white mb-6">Comments ({{ post.comments.length }})</h2>
 
-      <!-- Add Comment Form -->
-      <div class="add-comment-form">
-        <img src="https://i.pravatar.cc/150?img=5" alt="You" class="user-avatar" />
-        <div class="form-wrap">
-          <textarea class="comment-input"
-            [(ngModel)]="newComment"
-            placeholder="Share your thoughts…"
-            rows="3"></textarea>
-          <button class="submit-btn" [disabled]="!newComment.trim()" (click)="addComment()">
+      <!-- Add comment -->
+      <div class="flex gap-4 mb-8 p-6 bg-white/[.05] rounded-xl border border-white/10 flex-col sm:flex-row">
+        <img imgFallback="avatar" src="https://i.pravatar.cc/150?img=5" alt="You"
+          class="w-10 h-10 sm:w-10 sm:h-10 rounded-full object-cover shrink-0" />
+        <div class="flex flex-col gap-3 flex-1">
+          <textarea class="field-textarea" [(ngModel)]="newComment"
+            placeholder="Share your thoughts…" rows="3"></textarea>
+          <button class="btn-gradient self-start"
+            [disabled]="!newComment.trim()" (click)="addComment()">
             Post Comment
           </button>
         </div>
       </div>
 
-      <!-- Comments List -->
+      <!-- Comments list -->
       @if (post.comments.length > 0) {
-        <div class="comments-list">
+        <div class="flex flex-col gap-6">
           @for (comment of post.comments; track comment.id) {
-            <div class="comment">
-              <img [src]="comment.authorImage" [alt]="comment.author" class="comment-avatar" />
-              <div class="comment-content">
-                <div class="comment-header">
-                  <span class="comment-author">{{ comment.author }}</span>
-                  <span class="comment-time">{{ comment.createdAt | date:'short' }}</span>
+            <div class="flex gap-4 p-4 bg-white/[.03] rounded-xl border border-white/[.05]">
+              <img imgFallback="avatar" [src]="comment.authorImage" [alt]="comment.author"
+                class="w-9 h-9 rounded-full object-cover shrink-0" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2 flex-wrap">
+                  <span class="font-semibold text-white">{{ comment.author }}</span>
+                  <span class="text-[0.8rem] text-white/50">{{ comment.createdAt | date:'short' }}</span>
                 </div>
-                <p class="comment-text">{{ comment.content }}</p>
+                <p class="text-white/80 m-0 leading-[1.5] break-words">{{ comment.content }}</p>
               </div>
             </div>
           }
         </div>
       } @else {
-        <div class="no-comments">
-          <p>No comments yet. Be the first to comment!</p>
-        </div>
+        <div class="text-center py-8 text-white/50">No comments yet. Be the first!</div>
       }
     </div>
   }
 
   @if (!loading && !post) {
-    <div class="not-found">
-      <div class="not-found-icon">📭</div>
-      <h2>Post not found</h2>
-      <p>The post you're looking for doesn't exist</p>
-      <a routerLink="/posts" class="back-btn">Back to Posts</a>
+    <div class="text-center py-16 text-white/70">
+      <div class="text-6xl mb-4">📭</div>
+      <h2 class="text-white text-xl font-bold mb-2">Post not found</h2>
+      <p class="mb-6">The post you're looking for doesn't exist</p>
+      <a routerLink="/posts" class="btn-gradient">Back to Posts</a>
     </div>
   }
 </div>

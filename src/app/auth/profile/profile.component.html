@@ -1,24 +1,41 @@
 @if (!formReady) {
-  <div>Loading...</div>
+  <div class="flex items-center justify-center min-h-[200px] text-white/50">Loading…</div>
 }
 
 @if (formReady) {
-  <div class="profile-card">
-    <h2>Profile</h2>
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <mat-form-field class="form-field">
-        <mat-label>Full name</mat-label>
-        <input matInput formControlName="fullName" placeholder="Enter your full name" />
-      </mat-form-field>
-      <mat-form-field class="form-field">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" placeholder="Your email address" readonly />
-      </mat-form-field>
-      <mat-form-field class="form-field">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" />
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Save</button>
-    </form>
+  <div class="max-w-lg mx-auto">
+    <div class="glass-card p-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Profile</h2>
+
+      <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-5">
+        <div class="flex flex-col gap-1.5">
+          <label class="field-label" for="prof-name">Full Name</label>
+          <input id="prof-name" class="field-input" formControlName="fullName" placeholder="Enter your full name" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="field-label" for="prof-email">Email</label>
+          <input id="prof-email" class="field-input" formControlName="email" placeholder="Your email address" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="field-label" for="prof-phone">Phone</label>
+          <input id="prof-phone" class="field-input" formControlName="phoneNumber" placeholder="Enter your phone number" />
+        </div>
+
+        @if (saveMessage) {
+          <div class="success-message-box">{{ saveMessage }}</div>
+        }
+        @if (error) {
+          <div class="error-message">{{ error }}</div>
+        }
+
+        <button class="btn-gradient w-full justify-center py-3 text-base mt-1"
+          type="submit" [disabled]="loading">
+          @if (loading) { <span class="spin-ring"></span> Saving… }
+          @else { Save Changes }
+        </button>
+      </form>
+    </div>
   </div>
 }

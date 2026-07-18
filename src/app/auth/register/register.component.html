@@ -1,59 +1,62 @@
 <div class="auth-container">
   <div class="auth-card">
-    <h2>Create Account</h2>
+    <h2 class="auth-title">Create Account</h2>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <mat-form-field class="form-field">
-        <mat-label>Full Name</mat-label>
-        <input matInput formControlName="fullName" placeholder="Your full name" />
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5">
+      <!-- Full Name -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="reg-name">Full Name</label>
+        <input id="reg-name" class="field-input" formControlName="fullName" placeholder="Your full name" />
         @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
-          <mat-error>
+          <span class="field-error">
             @if (form.get('fullName')?.errors?.['required']) { Full name is required }
             @if (form.get('fullName')?.errors?.['minlength']) { Minimum 3 characters }
-          </mat-error>
+          </span>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field class="form-field">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="you@example.com" />
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="reg-email">Email</label>
+        <input id="reg-email" class="field-input" type="email" formControlName="email" placeholder="you@example.com" />
         @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <mat-error>
+          <span class="field-error">
             @if (form.get('email')?.errors?.['required']) { Email is required }
             @if (form.get('email')?.errors?.['email']) { Please enter a valid email }
-          </mat-error>
+          </span>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field class="form-field">
-        <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" placeholder="At least 6 characters" />
+      <!-- Password -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="reg-password">Password</label>
+        <input id="reg-password" class="field-input" type="password" formControlName="password" placeholder="At least 6 characters" />
         @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <mat-error>
+          <span class="field-error">
             @if (form.get('password')?.errors?.['required']) { Password is required }
             @if (form.get('password')?.errors?.['minlength']) { Minimum 6 characters }
-          </mat-error>
+          </span>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field class="form-field">
-        <mat-label>Confirm Password</mat-label>
-        <input matInput formControlName="confirmPassword" type="password" placeholder="Repeat your password" />
+      <!-- Confirm Password -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="reg-confirm">Confirm Password</label>
+        <input id="reg-confirm" class="field-input" type="password" formControlName="confirmPassword" placeholder="Repeat your password" />
         @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
-          <mat-error>Please confirm your password</mat-error>
+          <span class="field-error">Please confirm your password</span>
         }
-      </mat-form-field>
+      </div>
 
       @if (error) {
         <div class="error-message">{{ error }}</div>
       }
 
-      <div class="actions">
-        <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
-          @if (loading) { <span>Creating…</span> }
-          @if (!loading) { <span>Create Account</span> }
-        </button>
-      </div>
+      <button class="btn-gradient w-full justify-center py-3 text-base mt-1"
+        type="submit" [disabled]="loading || form.invalid">
+        @if (loading) { <span class="spin-ring"></span> Creating… }
+        @else { Create Account }
+      </button>
     </form>
 
     <div class="auth-links">

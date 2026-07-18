@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { User } from '../../models/user.model';
 import { CustomerService } from '../customer.service';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule, ImgFallbackDirective],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { MOCK_CARS } from '../../data/mock-cars';
 import { MOCK_USERS } from '../../data/mock-users';
 import { MOCK_POSTS } from '../../data/mock-posts';
@@ -10,7 +11,7 @@ import { MOCK_EVENTS } from '../../data/mock-events';
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule],
+  imports: [CommonModule, RouterLink, MatIconModule, ImgFallbackDirective],
   templateUrl: './overview.html',
   styleUrls: ['./overview.scss']
 })

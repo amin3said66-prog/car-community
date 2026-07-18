@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div class="posts-list">
+<div class="flex flex-col gap-5">
   @if (filtered.length === 0) {
     <div class="empty-state">
       <div class="empty-icon"><mat-icon>inbox</mat-icon></div>
@@ -31,43 +31,58 @@
   }
 
   @for (post of filtered; track post.id) {
-    <a [routerLink]="['/posts', post.id]" class="post-card">
-      <div class="post-main">
-        <div class="post-meta-top">
-          <img [src]="post.authorImage" [alt]="post.author" class="author-avatar" />
+    <a [routerLink]="['/posts', post.id]"
+      class="glass-card flex flex-col md:flex-row gap-5 p-5 md:p-6 no-underline transition-all duration-200 hover:border-purple-500/35 hover:shadow-[0_4px_24px_rgba(168,85,247,0.1)]">
+
+      <!-- Main content -->
+      <div class="flex-1 min-w-0">
+        <!-- Author row -->
+        <div class="flex items-center gap-3 mb-3.5 flex-wrap">
+          <img imgFallback="avatar" [src]="post.authorImage" [alt]="post.author"
+            class="w-10 h-10 rounded-full object-cover border border-white/[.14] shrink-0" />
           <div>
-            <div class="author-name">{{ post.author }}</div>
-            <div class="post-date">{{ post.createdAt | date:'mediumDate' }}</div>
+            <div class="text-sm font-semibold text-white whitespace-nowrap">{{ post.author }}</div>
+            <div class="text-[0.75rem] text-white/40 whitespace-nowrap">{{ post.createdAt | date:'mediumDate' }}</div>
           </div>
-          <span class="cat-badge {{ post.category }}">
+          <span class="cat-badge {{ post.category }} ml-auto">
             <mat-icon>{{ catIcon(post.category) }}</mat-icon> {{ post.category }}
           </span>
         </div>
 
-        <h2 class="post-title">{{ post.title }}</h2>
-        <p class="post-content">{{ post.content | slice:0:200 }}…</p>
+        <h2 class="text-base font-bold text-white m-0 mb-2">{{ post.title }}</h2>
+        <p class="text-[0.875rem] text-white/55 leading-[1.6] m-0 mb-4">{{ post.content | slice:0:200 }}…</p>
 
-        <div class="post-stats">
-          <button class="stat-btn" (click)="likePost(post, $event)">
-            <mat-icon>favorite</mat-icon> {{ post.likes }}
+        <!-- Stats -->
+        <div class="flex gap-3.5 items-center flex-wrap mb-3.5">
+          <button class="inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer text-[0.8rem] text-white/50 transition-colors hover:text-pink-400 p-0"
+            (click)="likePost(post, $event)">
+            <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">favorite</mat-icon> {{ post.likes }}
           </button>
-          <span class="stat"><mat-icon>chat_bubble</mat-icon> {{ post.comments.length }}</span>
+          <span class="inline-flex items-center gap-1 text-[0.8rem] text-white/40 whitespace-nowrap">
+            <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">chat_bubble</mat-icon> {{ post.comments.length }}
+          </span>
           @if (post.views) {
-            <span class="stat"><mat-icon>visibility</mat-icon> {{ post.views | number }}</span>
+            <span class="inline-flex items-center gap-1 text-[0.8rem] text-white/40 whitespace-nowrap">
+              <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">visibility</mat-icon> {{ post.views | number }}
+            </span>
           }
           @if (post.shares) {
-            <span class="stat"><mat-icon>share</mat-icon> {{ post.shares }}</span>
+            <span class="inline-flex items-center gap-1 text-[0.8rem] text-white/40 whitespace-nowrap">
+              <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">share</mat-icon> {{ post.shares }}
+            </span>
           }
         </div>
 
+        <!-- Comment previews -->
         @if (post.comments.length > 0) {
-          <div class="comments-preview">
+          <div class="flex flex-col gap-2">
             @for (comment of post.comments.slice(0, 2); track comment.id) {
-              <div class="comment-item">
-                <img [src]="comment.authorImage" [alt]="comment.author" class="comment-avatar" />
-                <div class="comment-bubble">
-                  <span class="comment-author">{{ comment.author }}</span>
-                  <span class="comment-text">{{ comment.content }}</span>
+              <div class="flex items-start gap-2 min-w-0">
+                <img imgFallback="avatar" [src]="comment.authorImage" [alt]="comment.author"
+                  class="w-6 h-6 rounded-full object-cover shrink-0 mt-0.5" />
+                <div class="bg-white/[.04] rounded-lg px-2.5 py-1.5 text-[0.78rem] min-w-0">
+                  <span class="font-semibold text-white mr-1.5">{{ comment.author }}</span>
+                  <span class="text-white/50">{{ comment.content }}</span>
                 </div>
               </div>
             }
@@ -75,9 +90,11 @@
         }
       </div>
 
+      <!-- Post image (desktop only) -->
       @if (post.image) {
-        <div class="post-img-wrap">
-          <img [src]="post.image" [alt]="post.title" class="post-img" />
+        <div class="hidden md:block w-40 shrink-0">
+          <img imgFallback="car" [src]="post.image" [alt]="post.title"
+            class="w-full h-[120px] object-cover rounded-xl" />
         </div>
       }
     </a>

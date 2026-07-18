@@ -1,64 +1,65 @@
 @if (success) {
-  <div class="success-screen">
-    <div class="success-icon">✅</div>
-    <h2>Car Listed Successfully!</h2>
-    <p>Redirecting to listings…</p>
+  <div class="text-center py-12 sm:py-20 w-full">
+    <div class="text-6xl mb-4">✅</div>
+    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Car Listed Successfully!</h2>
+    <p class="text-white/50">Redirecting to listings…</p>
   </div>
 } @else {
-  <div class="form-page">
-    <div class="form-header">
+  <div class="max-w-2xl mx-auto w-full px-4">
+    <div class="mb-8">
       <a routerLink="/cars" class="back-link">← Back to listings</a>
-      <h1 class="form-title">🚗 List Your Car</h1>
-      <p class="form-sub">Fill in the details below to add your car to the community</p>
+      <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">🚗 List Your Car</h1>
+      <p class="text-white/50">Fill in the details below to add your car to the community</p>
     </div>
 
-    <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()"
+      class="glass-card p-6 sm:p-8 flex flex-col gap-5 w-full">
 
       <!-- Make & Model -->
-      <div class="row-2">
-        <div class="field-group">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="make">Make *</label>
           <input id="make" class="field-input" formControlName="make" placeholder="e.g. Toyota" />
-          @if (isInvalid('make')) { <span class="err">Make is required</span> }
+          @if (isInvalid('make')) { <span class="field-error">Make is required</span> }
         </div>
-        <div class="field-group">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="model">Model *</label>
           <input id="model" class="field-input" formControlName="model" placeholder="e.g. Supra" />
-          @if (isInvalid('model')) { <span class="err">Model is required</span> }
+          @if (isInvalid('model')) { <span class="field-error">Model is required</span> }
         </div>
       </div>
 
       <!-- Year & Price -->
-      <div class="row-2">
-        <div class="field-group">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="year">Year *</label>
           <input id="year" class="field-input" type="number" formControlName="year" placeholder="2023" />
-          @if (isInvalid('year')) { <span class="err">Valid year required</span> }
+          @if (isInvalid('year')) { <span class="field-error">Valid year required</span> }
         </div>
-        <div class="field-group">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="price">Price (USD) *</label>
           <input id="price" class="field-input" type="number" formControlName="price" placeholder="45000" />
-          @if (isInvalid('price')) { <span class="err">Price is required</span> }
+          @if (isInvalid('price')) { <span class="field-error">Price is required</span> }
         </div>
       </div>
 
       <!-- Mileage & Colour -->
-      <div class="row-2">
-        <div class="field-group">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="mileage">Mileage (km) *</label>
           <input id="mileage" class="field-input" type="number" formControlName="mileage" placeholder="15000" />
-          @if (isInvalid('mileage')) { <span class="err">Mileage is required</span> }
+          @if (isInvalid('mileage')) { <span class="field-error">Mileage is required</span> }
         </div>
-        <div class="field-group">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="color">Colour *</label>
           <input id="color" class="field-input" formControlName="color" placeholder="e.g. Pearl White" />
-          @if (isInvalid('color')) { <span class="err">Colour is required</span> }
+          @if (isInvalid('color')) { <span class="field-error">Colour is required</span> }
         </div>
       </div>
 
       <!-- Fuel Type & Transmission -->
-      <div class="row-2">
-        <div class="field-group">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="fuelType">Fuel Type *</label>
           <select id="fuelType" class="field-select" formControlName="fuelType">
             <option value="petrol">⛽ Petrol</option>
@@ -67,7 +68,7 @@
             <option value="electric">⚡ Electric</option>
           </select>
         </div>
-        <div class="field-group">
+        <div class="flex flex-col gap-1.5">
           <label class="field-label" for="transmission">Transmission *</label>
           <select id="transmission" class="field-select" formControlName="transmission">
             <option value="automatic">Automatic</option>
@@ -77,23 +78,25 @@
       </div>
 
       <!-- Image URL -->
-      <div class="field-group">
+      <div class="flex flex-col gap-1.5">
         <label class="field-label" for="image">Image URL</label>
         <input id="image" class="field-input" formControlName="image" placeholder="https://…" />
       </div>
 
       <!-- Description -->
-      <div class="field-group">
+      <div class="flex flex-col gap-1.5">
         <label class="field-label" for="description">Description *</label>
         <textarea id="description" class="field-textarea" formControlName="description" rows="4"
           placeholder="Describe your car — condition, features, history…"></textarea>
         @if (isInvalid('description')) {
-          <span class="err">Description must be at least 20 characters</span>
+          <span class="field-error">Description must be at least 20 characters</span>
         }
       </div>
 
-      <button type="submit" class="submit-btn" [disabled]="loading">
-        @if (loading) { <span class="spinner"></span> Listing… }
+      <!-- Submit -->
+      <button type="submit" class="btn-gradient w-full justify-center py-3.5 text-base font-bold mt-1"
+        [disabled]="loading">
+        @if (loading) { <span class="spin-ring"></span> Listing… }
         @else { 🚗 List My Car }
       </button>
     </form>

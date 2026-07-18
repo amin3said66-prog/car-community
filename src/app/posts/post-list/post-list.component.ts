@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { Post } from '../../models/post.model';
 import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule, ImgFallbackDirective],
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
 })

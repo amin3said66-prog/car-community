@@ -2,13 +2,14 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { CarService } from '../car.service';
 import { Car } from '../../models/car.model';
 
 @Component({
   selector: 'app-car-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule],
+  imports: [CommonModule, RouterLink, MatIconModule, ImgFallbackDirective],
   templateUrl: './car-details.html',
   styleUrls: ['./car-details.scss'],
 })

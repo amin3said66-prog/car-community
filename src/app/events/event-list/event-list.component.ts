@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { Event } from '../../models/event.model';
 import { EventService } from '../event.service';
 
@@ -11,7 +12,7 @@ const CURRENT_USER_ID = 'current-user';
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule, ImgFallbackDirective],
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
 })

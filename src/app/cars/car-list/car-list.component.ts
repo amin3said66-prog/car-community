@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgFallbackDirective } from '../../shared/img-fallback.directive';
 import { CarService } from '../car.service';
 import { Car } from '../../models/car.model';
 
 @Component({
   selector: 'app-car-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule, ImgFallbackDirective],
   templateUrl: './car-list.html',
   styleUrls: ['./car-list.scss'],
 })

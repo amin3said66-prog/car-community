@@ -1,51 +1,123 @@
 @if (showShell) {
-  <div class="shell">
-    <nav class="shell-nav">
-      <a routerLink="/" class="brand">
-        <mat-icon>directions_car</mat-icon>
-        CarCommunity
+  <!-- Shell: fills app-root (100% height), flex column, no overflow — only <main> scrolls -->
+  <div class="h-full flex flex-col overflow-hidden">
+
+    <!-- ── Top navigation ───────────────────────────────────────── -->
+    <nav class="shrink-0 flex items-center gap-2 px-4 lg:px-8 h-14 sm:h-16
+                bg-[rgba(10,15,35,0.72)] backdrop-blur-xl
+                border-b border-white/[.07] z-[100]">
+
+      <!-- Brand logo -->
+      <a routerLink="/"
+         class="inline-flex items-center gap-1.5 font-extrabold gradient-text no-underline shrink-0 tracking-tight whitespace-nowrap text-[1rem] sm:text-[1.1rem]">
+        <mat-icon style="font-size:1.4rem;width:1.4rem;height:1.4rem">directions_car</mat-icon>
+        <span class="hidden xs:inline sm:inline">CarCommunity</span>
       </a>
 
-      <div class="nav-links">
+      <!-- ── Desktop links (lg+) ─────────────────────────────── -->
+      <div class="hidden lg:flex items-center gap-0.5 flex-1 mx-4">
         @for (link of navLinks; track link.path) {
-          <a [routerLink]="link.path" routerLinkActive="active" class="nav-link">
-            <mat-icon>{{ link.icon }}</mat-icon>
-            {{ link.label }}
+          <a [routerLink]="link.path" routerLinkActive="active"
+             class="nav-link inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                    text-white/55 no-underline text-[0.8rem] xl:text-sm font-medium
+                    transition-all hover:text-white hover:bg-white/[.07] border border-transparent">
+            <mat-icon style="font-size:1rem;width:1rem;height:1rem">{{ link.icon }}</mat-icon>
+            <span class="hidden xl:inline">{{ link.label }}</span>
           </a>
         }
       </div>
 
-      <div class="nav-actions">
-        <a routerLink="/auth/login" class="btn-outline">Login</a>
-        <a routerLink="/cars/new" class="btn-gradient">
-          <mat-icon>add</mat-icon> List a Car
+      <!-- ── Desktop actions (lg+) ──────────────────────────── -->
+      <div class="hidden lg:flex items-center gap-2 ml-auto shrink-0">
+        <a routerLink="/auth/login" class="btn-outline py-1.5 px-4 text-[0.8rem]">Login</a>
+        <a routerLink="/cars/new"   class="btn-gradient py-1.5 px-4 text-[0.8rem]">
+          <mat-icon style="font-size:0.95rem;width:0.95rem;height:0.95rem">add</mat-icon>
+          List a Car
         </a>
       </div>
 
-      <button class="hamburger" (click)="menuOpen = !menuOpen" aria-label="Toggle menu">
-        <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+      <!-- ── Hamburger (< lg) ────────────────────────────────── -->
+      <button
+        class="lg:hidden flex items-center justify-center ml-auto
+               bg-transparent border border-white/[.12] text-white/75
+               cursor-pointer p-1.5 rounded-lg transition-all
+               hover:bg-white/[.08] hover:text-white"
+        (click)="menuOpen = !menuOpen"
+        [attr.aria-expanded]="menuOpen"
+        aria-label="Toggle navigation menu">
+        <mat-icon style="font-size:1.35rem;width:1.35rem;height:1.35rem">
+          {{ menuOpen ? 'close' : 'menu' }}
+        </mat-icon>
       </button>
     </nav>
 
+    <!-- ── Mobile / tablet dropdown menu (< lg) ──────────────────── -->
     @if (menuOpen) {
-      <div class="mobile-menu">
+      <div class="lg:hidden shrink-0 flex flex-col
+                  bg-[#060c1a]/[.97] border-b border-white/[.08]
+                  z-[99] w-full">
         @for (link of navLinks; track link.path) {
           <a [routerLink]="link.path" routerLinkActive="active"
-             class="mobile-link" (click)="menuOpen = false">
-            <mat-icon>{{ link.icon }}</mat-icon>
+             class="mobile-link flex items-center gap-3.5
+                    px-5 sm:px-8 py-3.5 text-white/60 no-underline text-[0.875rem]
+                    border-b border-white/[.05] transition-all
+                    hover:text-white hover:bg-white/[.05] border-l-2 border-l-transparent"
+             (click)="menuOpen = false">
+            <mat-icon style="font-size:1.2rem;width:1.2rem;height:1.2rem">{{ link.icon }}</mat-icon>
             {{ link.label }}
           </a>
         }
-        <a routerLink="/auth/login" class="mobile-link" (click)="menuOpen = false">
-          <mat-icon>lock</mat-icon> Login
-        </a>
+        <!-- Mobile login + action -->
+        <div class="flex gap-2.5 px-5 sm:px-8 py-4 border-t border-white/[.07] mt-0.5">
+          <a routerLink="/auth/login" class="btn-outline flex-1 justify-center py-2"
+             (click)="menuOpen = false">Login</a>
+          <a routerLink="/cars/new"   class="btn-gradient flex-1 justify-center py-2"
+             (click)="menuOpen = false">
+            <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">add</mat-icon>
+            List a Car
+          </a>
+        </div>
       </div>
     }
 
-    <main class="shell-content">
+    <!-- ── Page content — THE ONLY SCROLLING CONTAINER ───────────── -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full">
       <router-outlet />
     </main>
+
+    <!-- ── Footer ────────────────────────────────────────────────── -->
+    <footer class="shrink-0 border-t border-white/[.06] bg-[rgba(10,15,35,0.55)] backdrop-blur-sm">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 min-h-[52px]">
+
+        <!-- Brand -->
+        <a routerLink="/" class="inline-flex items-center gap-1.5 gradient-text font-bold no-underline text-sm shrink-0 tracking-tight">
+          <mat-icon style="font-size:1.1rem;width:1.1rem;height:1.1rem">directions_car</mat-icon>
+          CarCommunity
+        </a>
+
+        <!-- Copyright — year always current -->
+        <p class="text-[0.75rem] text-white/30 m-0 text-center order-last sm:order-none">
+          © {{ currentYear }} CarCommunity. All rights reserved.
+        </p>
+
+        <!-- Quick links -->
+        <nav class="flex items-center gap-4" aria-label="Footer navigation">
+          @for (link of navLinks; track link.path) {
+            <a [routerLink]="link.path"
+               class="text-[0.75rem] text-white/35 no-underline transition-colors hover:text-white/70 whitespace-nowrap">
+              {{ link.label }}
+            </a>
+          }
+        </nav>
+
+      </div>
+    </footer>
+
   </div>
+
 } @else {
-  <router-outlet />
+  <!-- Auth & landing pages: own scrolling wrapper so forms aren't clipped on short screens -->
+  <div class="h-full overflow-y-auto">
+    <router-outlet />
+  </div>
 }

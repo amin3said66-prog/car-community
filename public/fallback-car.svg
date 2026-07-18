@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1a1040"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="400" fill="url(#bg)"/>
+  <!-- Car body -->
+  <g fill="rgba(255,255,255,0.07)" stroke="rgba(168,85,247,0.22)" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M72,242 L112,176 L192,155 L308,155 L388,176 L428,242 L428,278 L72,278 Z"/>
+    <path d="M158,180 L182,158 L318,158 L342,180 Z" fill="rgba(255,255,255,0.04)"/>
+    <path d="M164,178 L184,162 L243,162 L248,178 Z" fill="rgba(255,255,255,0.07)"/>
+    <path d="M254,178 L267,162 L316,162 L336,178 Z" fill="rgba(255,255,255,0.07)"/>
+  </g>
+  <!-- Wheels -->
+  <circle cx="162" cy="278" r="38" fill="rgba(255,255,255,0.03)" stroke="rgba(168,85,247,0.18)" stroke-width="2"/>
+  <circle cx="162" cy="278" r="19" fill="rgba(255,255,255,0.04)" stroke="rgba(168,85,247,0.12)" stroke-width="1.5"/>
+  <circle cx="338" cy="278" r="38" fill="rgba(255,255,255,0.03)" stroke="rgba(168,85,247,0.18)" stroke-width="2"/>
+  <circle cx="338" cy="278" r="19" fill="rgba(255,255,255,0.04)" stroke="rgba(168,85,247,0.12)" stroke-width="1.5"/>
+  <!-- Lights -->
+  <rect x="410" y="220" width="22" height="9" rx="2" fill="rgba(34,211,238,0.22)"/>
+  <rect x="68"  y="220" width="22" height="9" rx="2" fill="rgba(239,68,68,0.18)"/>
+  <!-- Label -->
+  <text x="250" y="356" fill="rgba(255,255,255,0.16)" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle" letter-spacing="0.5">Image unavailable</text>
+</svg>
