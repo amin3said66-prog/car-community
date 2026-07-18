@@ -11,15 +11,29 @@
     <input class="search-input" type="text" placeholder="Search members…"
       [(ngModel)]="search" (ngModelChange)="applyFilters()" />
   </div>
-  <button class="toggle-btn" [class.active]="verifiedOnly" (click)="toggleVerified()">
-    <mat-icon>verified</mat-icon> Verified only
+  <button
+    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-[0.8rem] cursor-pointer transition-all whitespace-nowrap shrink-0
+      {{ verifiedOnly ? 'bg-cyan-500/12 border-cyan-500/45 text-cyan-400' : 'bg-white/[.05] border-white/[.18] text-white/55 hover:border-cyan-500/40 hover:text-white' }}"
+    [class.active]="verifiedOnly" (click)="toggleVerified()">
+    <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">verified</mat-icon>
+    Verified only
   </button>
 </div>
 
-<div class="meta-bar">
-  <span><mat-icon>verified</mat-icon> {{ verifiedCount }} verified</span>
-  <span><mat-icon>directions_car</mat-icon> {{ totalCarsOwned }} cars owned</span>
-  <span><mat-icon>article</mat-icon> {{ totalPosts }} posts</span>
+<!-- Meta stats -->
+<div class="flex gap-5 mb-7 text-[0.78rem] text-white/40 flex-wrap items-center">
+  <span class="flex items-center gap-1">
+    <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem;vertical-align:middle">verified</mat-icon>
+    {{ verifiedCount }} verified
+  </span>
+  <span class="flex items-center gap-1">
+    <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem;vertical-align:middle">directions_car</mat-icon>
+    {{ totalCarsOwned }} cars owned
+  </span>
+  <span class="flex items-center gap-1">
+    <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem;vertical-align:middle">article</mat-icon>
+    {{ totalPosts }} posts
+  </span>
 </div>
 
 @if (filtered.length === 0) {
@@ -30,55 +44,65 @@
   </div>
 }
 
-<div class="members-grid">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
   @for (user of filtered; track user.id) {
-    <a [routerLink]="['/customers', user.id]" class="member-card">
-      <div class="member-top">
-        <div class="avatar-wrap">
-          <img [src]="user.profileImage" [alt]="user.fullName" class="avatar" />
+    <a [routerLink]="['/customers', user.id]"
+      class="glass-card block no-underline p-5 transition-all duration-200 hover:border-purple-500/40 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]">
+
+      <!-- Top: avatar + info -->
+      <div class="flex items-start gap-3.5 mb-3.5">
+        <div class="relative shrink-0">
+          <img [src]="user.profileImage" [alt]="user.fullName"
+            class="w-14 h-14 rounded-full object-cover border-2 border-white/[.18]" />
           @if (user.isVerified) {
-            <span class="verified-dot"><mat-icon>check</mat-icon></span>
+            <span class="absolute bottom-0 right-0 w-[18px] h-[18px] bg-teal-500 rounded-full flex items-center justify-center border-2 border-[#0f172a]">
+              <mat-icon style="font-size:0.65rem;width:0.65rem;height:0.65rem;color:white">check</mat-icon>
+            </span>
           }
         </div>
-        <div class="member-info">
-          <div class="full-name">
+        <div class="flex-1 min-w-0">
+          <div class="text-[0.95rem] font-bold text-white mb-0.5 flex items-center gap-1">
             {{ user.fullName }}
             @if (user.isVerified) {
-              <mat-icon class="verified-inline">verified</mat-icon>
+              <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem;color:#06b6d4">verified</mat-icon>
             }
           </div>
-          <div class="username">&#64;{{ user.userName }}</div>
-          <div class="stars-row">{{ stars(user.rating) }} <span class="rating-num">{{ user.rating }}</span></div>
+          <div class="text-[0.78rem] text-white/40 mb-1">&#64;{{ user.userName }}</div>
+          <div class="text-[0.72rem] text-amber-400">{{ stars(user.rating) }} <span class="text-white/45 ml-0.5">{{ user.rating }}</span></div>
         </div>
       </div>
 
-      <p class="bio">{{ user.bio }}</p>
+      <p class="text-[0.8rem] text-white/50 leading-[1.5] m-0 mb-4">{{ user.bio }}</p>
 
-      <div class="stats-row">
-        <div class="stat-block">
-          <div class="stat-num">{{ user.carsOwned }}</div>
-          <div class="stat-lbl">Cars</div>
+      <!-- Stats row -->
+      <div class="flex gap-2 mb-4 p-3 bg-white/[.03] rounded-xl border border-white/[.06]">
+        <div class="flex-1 text-center">
+          <div class="text-[1.1rem] font-extrabold text-white">{{ user.carsOwned }}</div>
+          <div class="text-[0.65rem] text-white/35 uppercase tracking-wide">Cars</div>
         </div>
-        <div class="stat-block">
-          <div class="stat-num">{{ user.postsCount }}</div>
-          <div class="stat-lbl">Posts</div>
+        <div class="flex-1 text-center">
+          <div class="text-[1.1rem] font-extrabold text-white">{{ user.postsCount }}</div>
+          <div class="text-[0.65rem] text-white/35 uppercase tracking-wide">Posts</div>
         </div>
-        <div class="stat-block">
-          <div class="stat-num">{{ user.eventsAttended }}</div>
-          <div class="stat-lbl">Events</div>
+        <div class="flex-1 text-center">
+          <div class="text-[1.1rem] font-extrabold text-white">{{ user.eventsAttended }}</div>
+          <div class="text-[0.65rem] text-white/35 uppercase tracking-wide">Events</div>
         </div>
         @if (user.followers !== undefined) {
-          <div class="stat-block">
-            <div class="stat-num">{{ user.followers }}</div>
-            <div class="stat-lbl">Followers</div>
+          <div class="flex-1 text-center">
+            <div class="text-[1.1rem] font-extrabold text-white">{{ user.followers }}</div>
+            <div class="text-[0.65rem] text-white/35 uppercase tracking-wide">Followers</div>
           </div>
         }
       </div>
 
-      <div class="member-footer">
-        <span class="join-date">Joined {{ user.joinDate | date:'mediumDate' }}</span>
+      <!-- Footer -->
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <span class="text-[0.72rem] text-white/35 whitespace-nowrap">Joined {{ user.joinDate | date:'mediumDate' }}</span>
         @if (user.isVerified) {
-          <span class="verified-tag"><mat-icon>verified</mat-icon> Verified</span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-cyan-500/08 border border-cyan-500/25 rounded-md text-[0.68rem] text-cyan-400 font-semibold">
+            <mat-icon style="font-size:0.75rem;width:0.75rem;height:0.75rem">verified</mat-icon> Verified
+          </span>
         }
       </div>
     </a>

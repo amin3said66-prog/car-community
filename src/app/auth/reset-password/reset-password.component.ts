@@ -1,30 +1,16 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../auth.service';
 import { finalize } from 'rxjs';
-
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
 import { ResetPasswordRequest } from '../models/auth.models';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatCardModule
-],
-  templateUrl: './reset-password.component.html',
+  imports: [ReactiveFormsModule, MatIconModule],
+  templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.scss'],
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {

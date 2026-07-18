@@ -1,130 +1,141 @@
-<div class="event-detail-container">
+<div class="max-w-4xl mx-auto py-2">
   @if (loading) {
-    <div class="loading">Loading...</div>
+    <div class="text-center py-16 text-white/70">Loading…</div>
   }
 
   @if (!loading && event) {
-    <!-- Back Button -->
-    <div class="back-nav">
-      <a routerLink="/events" class="back-link">← Back to Events</a>
+    <!-- Back -->
+    <div class="mb-8">
+      <a routerLink="/events" class="back-link">
+        <mat-icon>arrow_back</mat-icon> Back to Events
+      </a>
     </div>
 
-    <!-- Event Header -->
-    <div class="event-header">
-      <div class="event-img-wrap">
-        <img [src]="event.image" [alt]="event.title" class="event-image" />
-        <div class="overlay-badges">
-          <span class="status-badge {{ statusClass(event.status) }}">{{ event.status }}</span>
-          <span class="cat-badge-img">{{ catIcon(event.category) }}</span>
+    <!-- Event header grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 items-start">
+      <!-- Image -->
+      <div class="relative rounded-xl overflow-hidden aspect-square max-h-[500px]">
+        <img [src]="event.image" [alt]="event.title" class="w-full h-full object-cover" />
+        <div class="absolute top-4 right-4 flex gap-2">
+          <span class="px-3 py-1.5 rounded-lg text-[0.85rem] font-semibold capitalize
+            {{ statusClass(event.status) === 'green' ? 'bg-green-500/20 text-green-400' :
+               statusClass(event.status) === 'cyan'  ? 'bg-blue-500/20 text-blue-400' :
+               statusClass(event.status) === 'red'   ? 'bg-red-500/20 text-red-400' :
+                                                       'bg-gray-500/20 text-gray-400' }}">
+            {{ event.status }}
+          </span>
+          <span class="text-2xl flex items-center justify-center w-11 h-11 bg-[#0f172a]/90 rounded-lg">
+            {{ catIcon(event.category) }}
+          </span>
         </div>
       </div>
 
-      <div class="header-content">
-        <h1 class="event-title">{{ event.title }}</h1>
-        <p class="event-description">{{ event.description }}</p>
+      <!-- Info -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <h1 class="text-3xl sm:text-[2.5rem] font-bold text-white m-0 mb-3 leading-snug">{{ event.title }}</h1>
+          <p class="text-white/80 text-[1.05rem] leading-[1.6] m-0">{{ event.description }}</p>
+        </div>
 
-        <div class="event-meta-top">
-          <div class="meta-item">
-            <span class="meta-icon">📅</span>
+        <!-- Meta items -->
+        <div class="flex flex-col gap-4 p-6 bg-white/[.05] rounded-xl border border-white/10">
+          <div class="flex items-start gap-4">
+            <span class="text-2xl shrink-0">📅</span>
             <div>
-              <div class="meta-label">Date</div>
-              <div class="meta-value">{{ event.date | date:'longDate' }}</div>
+              <div class="text-[0.85rem] text-white/60 font-medium">Date</div>
+              <div class="text-white font-semibold text-[0.95rem]">{{ event.date | date:'longDate' }}</div>
             </div>
           </div>
-          <div class="meta-item">
-            <span class="meta-icon">⏰</span>
+          <div class="flex items-start gap-4">
+            <span class="text-2xl shrink-0">⏰</span>
             <div>
-              <div class="meta-label">Time</div>
-              <div class="meta-value">{{ event.time }}</div>
+              <div class="text-[0.85rem] text-white/60 font-medium">Time</div>
+              <div class="text-white font-semibold text-[0.95rem]">{{ event.time }}</div>
             </div>
           </div>
-          <div class="meta-item">
-            <span class="meta-icon">📍</span>
+          <div class="flex items-start gap-4">
+            <span class="text-2xl shrink-0">📍</span>
             <div>
-              <div class="meta-label">Location</div>
-              <div class="meta-value">{{ event.location }}</div>
+              <div class="text-[0.85rem] text-white/60 font-medium">Location</div>
+              <div class="text-white font-semibold text-[0.95rem]">{{ event.location }}</div>
             </div>
           </div>
         </div>
 
-        <div class="event-organizer">
-          <img [src]="event.organizerImage" [alt]="event.organizer" class="organizer-avatar" />
+        <!-- Organizer -->
+        <div class="flex items-center gap-4 p-4 bg-purple-500/10 rounded-xl border border-purple-500/20">
+          <img [src]="event.organizerImage" [alt]="event.organizer"
+            class="w-12 h-12 rounded-full object-cover shrink-0" />
           <div>
-            <div class="organizer-label">Organized by</div>
-            <div class="organizer-name">{{ event.organizer }}</div>
+            <div class="text-[0.8rem] text-white/60">Organized by</div>
+            <div class="text-white font-semibold">{{ event.organizer }}</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Event Details -->
-    <div class="event-details-grid">
-      <div class="detail-card">
-        <h3>📊 Attendance</h3>
-        <div class="progress-bar">
-          <div class="progress-fill"
-            [style.width.%]="(event.attendees.length / event.maxAttendees) * 100">
-          </div>
+    <!-- Detail cards grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <!-- Attendance -->
+      <div class="col-span-2 p-6 bg-white/[.05] border border-white/10 rounded-xl">
+        <h3 class="text-white text-[0.95rem] font-semibold m-0 mb-4">📊 Attendance</h3>
+        <div class="h-2 bg-white/10 rounded-sm overflow-hidden mb-3">
+          <div class="h-full rounded-sm transition-[width] duration-300"
+            style="background: linear-gradient(90deg, #06b6d4, #9333ea)"
+            [style.width.%]="(event.attendees.length / event.maxAttendees) * 100"></div>
         </div>
-        <div class="attendance-text">
+        <div class="text-white/80 text-[0.9rem]">
           <strong>{{ event.attendees.length }} / {{ event.maxAttendees }}</strong> attending
           · <strong>{{ spotsLeft() }} spots</strong> left
         </div>
       </div>
 
-      <div class="detail-card">
-        <h3>💰 Pricing</h3>
+      <!-- Pricing -->
+      <div class="p-6 bg-white/[.05] border border-white/10 rounded-xl">
+        <h3 class="text-white text-[0.95rem] font-semibold m-0 mb-4">💰 Pricing</h3>
         @if (event.price === 0) {
-          <div class="price-tag free">Free Entry</div>
+          <div class="text-2xl font-bold text-green-400 text-center py-2 bg-green-500/10 rounded-lg">Free Entry</div>
         } @else {
-          <div class="price-tag paid">
-            ${{ event.price }}
-            <span class="price-label">per ticket</span>
+          <div class="text-center py-2 bg-amber-500/10 rounded-lg">
+            <div class="text-2xl font-bold text-amber-400">${{ event.price }}</div>
+            <div class="text-[0.75rem] text-white/70 mt-1">per ticket</div>
           </div>
         }
       </div>
 
-      <div class="detail-card">
-        <h3>📂 Category</h3>
-        <div class="category-tag">
+      <!-- Category -->
+      <div class="p-6 bg-white/[.05] border border-white/10 rounded-xl">
+        <h3 class="text-white text-[0.95rem] font-semibold m-0 mb-4">📂 Category</h3>
+        <div class="text-cyan-400 font-semibold text-[0.95rem] text-center py-2 bg-cyan-500/10 rounded-lg">
           {{ catIcon(event.category) }} {{ event.category | titlecase }}
-        </div>
-      </div>
-
-      <div class="detail-card">
-        <h3>🎟️ Status</h3>
-        <div class="status-tag {{ statusClass(event.status) }}">
-          {{ event.status | titlecase }}
         </div>
       </div>
     </div>
 
-    <!-- Action Button -->
-    <div class="action-section">
+    <!-- Action button -->
+    <div class="flex gap-4 my-8">
       @if (event.status === 'upcoming') {
         @if (spotsLeft() > 0) {
-          <button class="action-btn" [class.attending]="isAttending" (click)="toggleAttend()">
-            @if (isAttending) {
-              ✓ Attending
-            } @else {
-              🎫 Join Event
-            }
+          <button class="flex-1 py-4 text-base font-semibold border-0 rounded-xl cursor-pointer transition-all"
+            [class]="isAttending ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'btn-gradient'"
+            (click)="toggleAttend()">
+            @if (isAttending) { ✓ Attending } @else { 🎫 Join Event }
           </button>
         } @else {
-          <button class="action-btn disabled" disabled>Event Full</button>
+          <button class="flex-1 py-4 text-base font-semibold border-0 rounded-xl opacity-50 cursor-not-allowed bg-white/10 text-white" disabled>Event Full</button>
         }
       } @else {
-        <button class="action-btn disabled" disabled>{{ event.status | titlecase }}</button>
+        <button class="flex-1 py-4 text-base font-semibold border-0 rounded-xl opacity-50 cursor-not-allowed bg-white/10 text-white capitalize" disabled>{{ event.status }}</button>
       }
     </div>
   }
 
   @if (!loading && !event) {
-    <div class="not-found">
-      <div class="not-found-icon">📭</div>
-      <h2>Event not found</h2>
-      <p>The event you're looking for doesn't exist</p>
-      <a routerLink="/events" class="back-btn">Back to Events</a>
+    <div class="text-center py-16 text-white/70">
+      <div class="text-6xl mb-4">📭</div>
+      <h2 class="text-white text-xl font-bold mb-2">Event not found</h2>
+      <p class="mb-6">The event you're looking for doesn't exist</p>
+      <a routerLink="/events" class="btn-gradient">Back to Events</a>
     </div>
   }
 </div>

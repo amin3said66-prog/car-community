@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.model';
 import { CustomerService } from '../customer.service';
 
 @Component({
   selector: 'app-customer-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, MatIconModule],
   templateUrl: './customer-details.component.html',
   styleUrls: ['./customer-details.component.scss'],
 })

@@ -1,6 +1,6 @@
 @if (loading) {
-  <div class="loading-state">
-    <div class="spinner"></div>
+  <div class="text-center py-16 text-white/50">
+    <div class="w-11 h-11 border-[3px] border-white/[.08] border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
     <p>Loading car details…</p>
   </div>
 }
@@ -17,84 +17,75 @@
 }
 
 @if (!loading && car) {
-  <div class="detail-wrap">
+  <div class="max-w-[1100px] mx-auto">
     <a routerLink="/cars" class="back-link">
       <mat-icon>arrow_back</mat-icon> Back to listings
     </a>
 
-    <div class="detail-grid">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <!-- Left: image + owner -->
-      <div class="left-col">
-        <div class="img-wrap">
-          <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="detail-img" />
+      <div>
+        <div class="relative rounded-xl overflow-hidden aspect-[4/3]">
+          <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="w-full h-full object-cover" />
           @if (car.featured) {
             <span class="featured-badge"><mat-icon>star</mat-icon> Featured</span>
           }
         </div>
 
-        <div class="owner-card">
-          <img [src]="car.ownerImage" [alt]="car.owner" class="owner-img" />
-          <div class="owner-info">
-            <div class="owner-name">{{ car.owner }}</div>
-            <div class="owner-label">Owner / Seller</div>
+        <!-- Owner card -->
+        <div class="flex items-center gap-3.5 mt-4 p-4 glass-card flex-wrap">
+          <img [src]="car.ownerImage" [alt]="car.owner"
+            class="w-12 h-12 rounded-full object-cover border-2 border-purple-500/40 shrink-0" />
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-white text-[0.9rem]">{{ car.owner }}</div>
+            <div class="text-[0.75rem] text-white/40">Owner / Seller</div>
           </div>
-          <a href="mailto:owner@example.com" class="btn-gradient contact-btn">Contact</a>
+          <a href="mailto:owner@example.com" class="btn-gradient ml-auto" style="padding:0.375rem 1rem;font-size:0.8rem">Contact</a>
         </div>
       </div>
 
       <!-- Right: details -->
-      <div class="right-col">
-        <div class="make-model">{{ car.year }} {{ car.make }} {{ car.model }}</div>
-        <div class="price">${{ car.price | number }}</div>
+      <div>
+        <div class="text-2xl sm:text-[1.75rem] font-bold text-white mb-1">{{ car.year }} {{ car.make }} {{ car.model }}</div>
+        <div class="text-[1.75rem] sm:text-[2rem] font-bold text-cyan-400 mb-4">${{ car.price | number }}</div>
 
-        <div class="badges">
-          <span class="badge">{{ car.fuelType }}</span>
-          <span class="badge">{{ car.transmission }}</span>
-          <span class="badge">{{ car.color }}</span>
-          <span class="badge">{{ car.mileage | number }} km</span>
+        <div class="flex flex-wrap gap-2 mb-4">
+          @for (badge of [car.fuelType, car.transmission, car.color, (car.mileage | number) + ' km']; track badge) {
+            <span class="px-3 py-1 bg-white/[.07] border border-white/[.12] rounded-lg text-[0.8rem] text-white/65 capitalize whitespace-nowrap">{{ badge }}</span>
+          }
         </div>
 
-        <div class="rating-row">
-          <span class="stars">★★★★★</span>
-          <span class="rating-val">{{ car.rating }} / 5.0</span>
+        <div class="flex items-center gap-2 mb-5">
+          <span class="text-amber-400 text-base">★★★★★</span>
+          <span class="text-white/55 text-sm">{{ car.rating }} / 5.0</span>
         </div>
 
-        <h3 class="section-label">Description</h3>
-        <p class="description">{{ car.description }}</p>
+        <h3 class="text-base font-semibold text-white mt-6 mb-3">Description</h3>
+        <p class="text-white/60 leading-[1.7] text-[0.9rem]">{{ car.description }}</p>
 
-        <div class="specs-grid">
-          <div class="spec-item">
-            <span class="spec-label">Fuel Type</span>
-            <span class="spec-val">{{ car.fuelType | titlecase }}</span>
-          </div>
-          <div class="spec-item">
-            <span class="spec-label">Transmission</span>
-            <span class="spec-val">{{ car.transmission | titlecase }}</span>
-          </div>
-          <div class="spec-item">
-            <span class="spec-label">Year</span>
-            <span class="spec-val">{{ car.year }}</span>
-          </div>
-          <div class="spec-item">
-            <span class="spec-label">Mileage</span>
-            <span class="spec-val">{{ car.mileage | number }} km</span>
-          </div>
-          <div class="spec-item">
-            <span class="spec-label">Colour</span>
-            <span class="spec-val">{{ car.color }}</span>
-          </div>
-          <div class="spec-item">
-            <span class="spec-label">Listed</span>
-            <span class="spec-val">{{ car.createdAt | date:'mediumDate' }}</span>
-          </div>
+        <!-- Specs grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
+          @for (spec of [
+            {label:'Fuel Type', val: car.fuelType},
+            {label:'Transmission', val: car.transmission},
+            {label:'Year', val: car.year},
+            {label:'Mileage', val: (car.mileage | number) + ' km'},
+            {label:'Colour', val: car.color},
+            {label:'Listed', val: (car.createdAt | date:'mediumDate')}
+          ]; track spec.label) {
+            <div class="p-3 bg-white/[.04] border border-white/[.07] rounded-xl">
+              <span class="block text-[0.68rem] text-white/40 mb-1 uppercase tracking-wide">{{ spec.label }}</span>
+              <span class="text-[0.875rem] font-semibold text-white capitalize">{{ spec.val }}</span>
+            </div>
+          }
         </div>
 
         @if (car.reviews && car.reviews.length > 0) {
-          <h3 class="section-label">Reviews ({{ car.reviews.length }})</h3>
-          <div class="reviews-list">
+          <h3 class="text-base font-semibold text-white mt-6 mb-3">Reviews ({{ car.reviews.length }})</h3>
+          <div class="flex flex-col gap-2">
             @for (review of car.reviews; track review) {
-              <div class="review-item">
-                <mat-icon>chat_bubble</mat-icon>
+              <div class="flex items-start gap-2 px-4 py-3 bg-white/[.04] border border-white/[.07] rounded-xl text-[0.875rem] text-white/60">
+                <mat-icon style="font-size:1rem;width:1rem;height:1rem;color:rgba(168,85,247,0.6);flex-shrink:0;margin-top:1px">chat_bubble</mat-icon>
                 {{ review }}
               </div>
             }

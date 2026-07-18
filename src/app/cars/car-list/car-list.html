@@ -1,8 +1,6 @@
 <div class="page-header">
   <div>
-    <h1 class="page-title">
-      <mat-icon>directions_car</mat-icon> Car Listings
-    </h1>
+    <h1 class="page-title"><mat-icon>directions_car</mat-icon> Car Listings</h1>
     <p class="page-sub">Browse {{ filtered.length }} cars from enthusiasts</p>
   </div>
   <a routerLink="/cars/new" class="btn-gradient">
@@ -35,7 +33,7 @@
 
 <!-- Skeleton loading -->
 @if (loading) {
-  <div class="cars-grid">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     @for (n of [1,2,3,4,5,6]; track n) {
       <div class="skeleton-card"></div>
     }
@@ -55,40 +53,47 @@
     </div>
   }
 
-  <div class="cars-grid">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     @for (car of filtered; track car.id) {
-      <a [routerLink]="['/cars', car.id]" class="car-card">
+      <a [routerLink]="['/cars', car.id]" class="group glass-card relative block no-underline overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-purple-500/45 hover:shadow-[0_12px_40px_rgba(168,85,247,0.18)]">
         @if (car.featured) {
           <span class="featured-badge"><mat-icon>star</mat-icon> Featured</span>
         }
-        <div class="car-img-wrap">
-          <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="car-img" loading="lazy" />
+
+        <!-- Image -->
+        <div class="h-48 overflow-hidden">
+          <img [src]="car.image" [alt]="car.make + ' ' + car.model"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
         </div>
-        <div class="car-body">
-          <div class="car-title-row">
-            <h3 class="car-title">{{ car.year }} {{ car.make }} {{ car.model }}</h3>
-            <span class="fuel-badge">
-              <mat-icon>{{ fuelIcon(car.fuelType) }}</mat-icon>
+
+        <!-- Body -->
+        <div class="p-4 pb-5">
+          <div class="flex items-start justify-between gap-2 mb-1">
+            <h3 class="text-[0.95rem] font-bold text-white leading-snug m-0">{{ car.year }} {{ car.make }} {{ car.model }}</h3>
+            <span class="shrink-0 inline-flex items-center gap-0.5 px-2 py-0.5 bg-white/[.07] border border-white/[.12] rounded-md text-[0.7rem] text-white/65 capitalize whitespace-nowrap">
+              <mat-icon style="font-size:0.8rem;width:0.8rem;height:0.8rem">{{ fuelIcon(car.fuelType) }}</mat-icon>
               {{ car.fuelType }}
             </span>
           </div>
-          <p class="car-color">{{ car.color }} · {{ car.transmission }}</p>
-          <p class="car-desc">{{ car.description | slice:0:90 }}…</p>
 
-          <div class="car-footer">
+          <p class="text-[0.78rem] text-white/40 capitalize m-0 mb-2">{{ car.color }} · {{ car.transmission }}</p>
+          <p class="text-[0.8rem] text-white/50 m-0 mb-4 leading-[1.55]">{{ car.description | slice:0:90 }}…</p>
+
+          <div class="flex justify-between items-end mb-3.5 gap-2">
             <div>
-              <div class="car-price">${{ car.price | number }}</div>
-              <div class="car-mileage">{{ car.mileage | number }} km</div>
+              <div class="text-xl font-bold text-cyan-400 whitespace-nowrap">${{ car.price | number }}</div>
+              <div class="text-[0.72rem] text-white/40 whitespace-nowrap">{{ car.mileage | number }} km</div>
             </div>
-            <div class="car-rating">
-              <span class="stars">{{ stars(car.rating) }}</span>
-              <span class="rating-val">{{ car.rating }}</span>
+            <div class="text-right">
+              <div class="text-amber-400 text-[0.72rem] tracking-widest block">{{ stars(car.rating) }}</div>
+              <div class="text-[0.75rem] text-white/50 block">{{ car.rating }}</div>
             </div>
           </div>
 
-          <div class="owner-row">
-            <img [src]="car.ownerImage" [alt]="car.owner" class="owner-avatar" />
-            <span class="owner-name">{{ car.owner }}</span>
+          <div class="flex items-center gap-2 pt-3.5 border-t border-white/[.07] min-w-0">
+            <img [src]="car.ownerImage" [alt]="car.owner"
+              class="w-6 h-6 rounded-full object-cover border border-white/[.18] shrink-0" />
+            <span class="text-[0.78rem] text-white/50 overflow-hidden text-ellipsis whitespace-nowrap">{{ car.owner }}</span>
           </div>
         </div>
       </a>

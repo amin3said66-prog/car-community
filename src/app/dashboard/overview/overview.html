@@ -1,101 +1,131 @@
-<div class="dash-header">
-  <h1 class="dash-title"><mat-icon>bar_chart</mat-icon> Dashboard</h1>
-  <p class="dash-sub">Community overview at a glance</p>
+<!-- Header -->
+<div class="mb-8">
+  <h1 class="text-2xl sm:text-[2rem] font-extrabold text-white m-0 mb-1 flex items-center gap-2 tracking-tight">
+    <mat-icon style="font-size:1.75rem;width:1.75rem;height:1.75rem">bar_chart</mat-icon>
+    Dashboard
+  </h1>
+  <p class="text-white/45 m-0 text-sm">Community overview at a glance</p>
 </div>
 
-<!-- Stat Cards -->
-<div class="stats-grid">
-  <div class="stat-card cyan">
-    <div class="stat-icon"><mat-icon>directions_car</mat-icon></div>
-    <div class="stat-num">{{ stats.totalCars }}</div>
-    <div class="stat-label">Total Cars</div>
-    <div class="stat-meta">{{ stats.featuredCars }} featured</div>
+<!-- Stat cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <!-- Cars -->
+  <div class="p-6 rounded-xl border text-center transition-all hover:-translate-y-0.5 bg-cyan-500/[.06] border-cyan-500/20">
+    <div class="w-12 h-12 bg-cyan-500/10 rounded-[10px] flex items-center justify-center mx-auto mb-3.5 text-cyan-400">
+      <mat-icon style="font-size:1.75rem;width:1.75rem;height:1.75rem">directions_car</mat-icon>
+    </div>
+    <div class="text-[1.75rem] sm:text-[2.25rem] font-extrabold text-cyan-400 leading-none mb-1">{{ stats.totalCars }}</div>
+    <div class="text-[0.875rem] font-semibold text-white/65">Total Cars</div>
+    <div class="text-[0.72rem] text-white/35 mt-1">{{ stats.featuredCars }} featured</div>
   </div>
-  <div class="stat-card purple">
-    <div class="stat-icon"><mat-icon>groups</mat-icon></div>
-    <div class="stat-num">{{ stats.totalUsers }}</div>
-    <div class="stat-label">Members</div>
-    <div class="stat-meta">{{ stats.verifiedUsers }} verified</div>
+
+  <!-- Members -->
+  <div class="p-6 rounded-xl border text-center transition-all hover:-translate-y-0.5 bg-purple-500/[.06] border-purple-500/20">
+    <div class="w-12 h-12 bg-purple-500/10 rounded-[10px] flex items-center justify-center mx-auto mb-3.5 text-purple-400">
+      <mat-icon style="font-size:1.75rem;width:1.75rem;height:1.75rem">groups</mat-icon>
+    </div>
+    <div class="text-[1.75rem] sm:text-[2.25rem] font-extrabold text-purple-400 leading-none mb-1">{{ stats.totalUsers }}</div>
+    <div class="text-[0.875rem] font-semibold text-white/65">Members</div>
+    <div class="text-[0.72rem] text-white/35 mt-1">{{ stats.verifiedUsers }} verified</div>
   </div>
-  <div class="stat-card amber">
-    <div class="stat-icon"><mat-icon>article</mat-icon></div>
-    <div class="stat-num">{{ stats.totalPosts }}</div>
-    <div class="stat-label">Posts</div>
-    <div class="stat-meta">{{ stats.totalLikes }} total likes</div>
+
+  <!-- Posts -->
+  <div class="p-6 rounded-xl border text-center transition-all hover:-translate-y-0.5 bg-amber-500/[.06] border-amber-500/20">
+    <div class="w-12 h-12 bg-amber-500/10 rounded-[10px] flex items-center justify-center mx-auto mb-3.5 text-amber-400">
+      <mat-icon style="font-size:1.75rem;width:1.75rem;height:1.75rem">article</mat-icon>
+    </div>
+    <div class="text-[1.75rem] sm:text-[2.25rem] font-extrabold text-amber-400 leading-none mb-1">{{ stats.totalPosts }}</div>
+    <div class="text-[0.875rem] font-semibold text-white/65">Posts</div>
+    <div class="text-[0.72rem] text-white/35 mt-1">{{ stats.totalLikes }} total likes</div>
   </div>
-  <div class="stat-card green">
-    <div class="stat-icon"><mat-icon>celebration</mat-icon></div>
-    <div class="stat-num">{{ stats.totalEvents }}</div>
-    <div class="stat-label">Events</div>
-    <div class="stat-meta">{{ stats.upcomingEvents }} upcoming</div>
+
+  <!-- Events -->
+  <div class="p-6 rounded-xl border text-center transition-all hover:-translate-y-0.5 bg-green-500/[.06] border-green-500/20">
+    <div class="w-12 h-12 bg-green-500/10 rounded-[10px] flex items-center justify-center mx-auto mb-3.5 text-green-400">
+      <mat-icon style="font-size:1.75rem;width:1.75rem;height:1.75rem">celebration</mat-icon>
+    </div>
+    <div class="text-[1.75rem] sm:text-[2.25rem] font-extrabold text-green-400 leading-none mb-1">{{ stats.totalEvents }}</div>
+    <div class="text-[0.875rem] font-semibold text-white/65">Events</div>
+    <div class="text-[0.72rem] text-white/35 mt-1">{{ stats.upcomingEvents }} upcoming</div>
   </div>
 </div>
 
 <!-- Bottom grid -->
-<div class="dash-grid">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
   <!-- Recent Cars -->
-  <section class="dash-section">
-    <div class="section-head">
-      <h2 class="section-title">Recent Cars</h2>
-      <a routerLink="/cars" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
+  <section class="bg-white/[.04] border border-white/[.07] rounded-xl p-5 overflow-hidden">
+    <div class="flex items-center justify-between mb-4 gap-2">
+      <h2 class="text-base font-bold text-white m-0">Recent Cars</h2>
+      <a routerLink="/cars" class="inline-flex items-center gap-0.5 text-[0.78rem] text-purple-500 no-underline shrink-0 transition-colors hover:text-purple-300">
+        See all <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">arrow_forward</mat-icon>
+      </a>
     </div>
-    <div class="item-list">
+    <div class="flex flex-col gap-2">
       @for (car of recentCars; track car.id) {
-        <a [routerLink]="['/cars', car.id]" class="list-item">
-          <img [src]="car.image" [alt]="car.make" class="list-thumb" />
-          <div class="list-info">
-            <div class="list-name">{{ car.year }} {{ car.make }} {{ car.model }}</div>
-            <div class="list-meta">{{ car.color }} · {{ car.fuelType }}</div>
+        <a [routerLink]="['/cars', car.id]"
+          class="flex items-center gap-3 p-2.5 rounded-[10px] bg-white/[.03] no-underline transition-colors hover:bg-white/[.07] min-w-0">
+          <img [src]="car.image" [alt]="car.make"
+            class="w-13 h-9.5 rounded-lg object-cover shrink-0" style="width:52px;height:38px" />
+          <div class="flex-1 min-w-0">
+            <div class="text-[0.82rem] font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap">{{ car.year }} {{ car.make }} {{ car.model }}</div>
+            <div class="text-[0.72rem] text-white/40 capitalize mt-0.5">{{ car.color }} · {{ car.fuelType }}</div>
           </div>
-          <div class="list-price">${{ car.price | number }}</div>
+          <div class="text-[0.875rem] font-bold text-cyan-400 shrink-0 whitespace-nowrap">${{ car.price | number }}</div>
         </a>
       }
     </div>
   </section>
 
   <!-- Recent Posts -->
-  <section class="dash-section">
-    <div class="section-head">
-      <h2 class="section-title">Recent Posts</h2>
-      <a routerLink="/posts" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
+  <section class="bg-white/[.04] border border-white/[.07] rounded-xl p-5 overflow-hidden">
+    <div class="flex items-center justify-between mb-4 gap-2">
+      <h2 class="text-base font-bold text-white m-0">Recent Posts</h2>
+      <a routerLink="/posts" class="inline-flex items-center gap-0.5 text-[0.78rem] text-purple-500 no-underline shrink-0 transition-colors hover:text-purple-300">
+        See all <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">arrow_forward</mat-icon>
+      </a>
     </div>
-    <div class="item-list">
+    <div class="flex flex-col gap-2">
       @for (post of recentPosts; track post.id) {
-        <a routerLink="/posts" class="list-item">
-          <img [src]="post.authorImage" [alt]="post.author" class="list-avatar" />
-          <div class="list-info">
-            <div class="list-name">{{ post.title }}</div>
-            <div class="list-meta">{{ post.author }} · {{ post.likes }} likes</div>
+        <a routerLink="/posts"
+          class="flex items-center gap-3 p-2.5 rounded-[10px] bg-white/[.03] no-underline transition-colors hover:bg-white/[.07] min-w-0">
+          <img [src]="post.authorImage" [alt]="post.author"
+            class="w-9.5 h-9.5 rounded-full object-cover shrink-0 border border-white/[.12]" style="width:38px;height:38px" />
+          <div class="flex-1 min-w-0">
+            <div class="text-[0.82rem] font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap">{{ post.title }}</div>
+            <div class="text-[0.72rem] text-white/40 mt-0.5">{{ post.author }} · {{ post.likes }} likes</div>
           </div>
-          <span class="cat-badge {{ post.category }}">{{ post.category }}</span>
+          <span class="cat-badge {{ post.category }} shrink-0">{{ post.category }}</span>
         </a>
       }
     </div>
   </section>
 
   <!-- Upcoming Events -->
-  <section class="dash-section">
-    <div class="section-head">
-      <h2 class="section-title">Upcoming Events</h2>
-      <a routerLink="/events" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
+  <section class="bg-white/[.04] border border-white/[.07] rounded-xl p-5 overflow-hidden">
+    <div class="flex items-center justify-between mb-4 gap-2">
+      <h2 class="text-base font-bold text-white m-0">Upcoming Events</h2>
+      <a routerLink="/events" class="inline-flex items-center gap-0.5 text-[0.78rem] text-purple-500 no-underline shrink-0 transition-colors hover:text-purple-300">
+        See all <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">arrow_forward</mat-icon>
+      </a>
     </div>
-    <div class="item-list">
+    <div class="flex flex-col gap-2">
       @for (event of upcomingEvents; track event.id) {
-        <a routerLink="/events" class="list-item">
-          <div class="event-date-box">
-            <span class="event-day">{{ event.date | date:'d' }}</span>
-            <span class="event-mon">{{ event.date | date:'MMM' }}</span>
+        <a routerLink="/events"
+          class="flex items-center gap-3 p-2.5 rounded-[10px] bg-white/[.03] no-underline transition-colors hover:bg-white/[.07] min-w-0">
+          <div class="shrink-0 w-11 h-11 bg-purple-500/12 border border-purple-500/25 rounded-[10px] flex flex-col items-center justify-center">
+            <span class="text-base font-extrabold text-purple-300 leading-none">{{ event.date | date:'d' }}</span>
+            <span class="text-[0.58rem] text-white/45 uppercase">{{ event.date | date:'MMM' }}</span>
           </div>
-          <div class="list-info">
-            <div class="list-name">{{ event.title }}</div>
-            <div class="list-meta">
-              <mat-icon>location_on</mat-icon> {{ event.location }}
+          <div class="flex-1 min-w-0">
+            <div class="text-[0.82rem] font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap">{{ event.title }}</div>
+            <div class="flex items-center gap-1 text-[0.72rem] text-white/40 mt-0.5">
+              <mat-icon style="font-size:0.75rem;width:0.75rem;height:0.75rem">location_on</mat-icon>
+              {{ event.location }}
             </div>
           </div>
-          <div class="event-price">
-            @if (event.price === 0) { Free }
-            @else { ${{ event.price }} }
+          <div class="text-[0.85rem] font-bold text-green-400 shrink-0 whitespace-nowrap">
+            @if (event.price === 0) { Free } @else { ${{ event.price }} }
           </div>
         </a>
       }
@@ -103,23 +133,32 @@
   </section>
 
   <!-- Top Members -->
-  <section class="dash-section">
-    <div class="section-head">
-      <h2 class="section-title">Top Members</h2>
-      <a routerLink="/customers" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
+  <section class="bg-white/[.04] border border-white/[.07] rounded-xl p-5 overflow-hidden">
+    <div class="flex items-center justify-between mb-4 gap-2">
+      <h2 class="text-base font-bold text-white m-0">Top Members</h2>
+      <a routerLink="/customers" class="inline-flex items-center gap-0.5 text-[0.78rem] text-purple-500 no-underline shrink-0 transition-colors hover:text-purple-300">
+        See all <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">arrow_forward</mat-icon>
+      </a>
     </div>
-    <div class="item-list">
+    <div class="flex flex-col gap-2">
       @for (user of topMembers; track user.id) {
-        <a routerLink="/customers" class="list-item">
-          <img [src]="user.profileImage" [alt]="user.fullName" class="list-avatar" />
-          <div class="list-info">
-            <div class="list-name">
+        <a routerLink="/customers"
+          class="flex items-center gap-3 p-2.5 rounded-[10px] bg-white/[.03] no-underline transition-colors hover:bg-white/[.07] min-w-0">
+          <img [src]="user.profileImage" [alt]="user.fullName"
+            class="rounded-full object-cover shrink-0 border border-white/[.12]" style="width:38px;height:38px" />
+          <div class="flex-1 min-w-0">
+            <div class="text-[0.82rem] font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-1">
               {{ user.fullName }}
-              @if (user.isVerified) { <mat-icon class="verified-icon">verified</mat-icon> }
+              @if (user.isVerified) {
+                <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem;color:#06b6d4">verified</mat-icon>
+              }
             </div>
-            <div class="list-meta">{{ user.carsOwned }} cars · {{ user.postsCount }} posts</div>
+            <div class="text-[0.72rem] text-white/40 mt-0.5">{{ user.carsOwned }} cars · {{ user.postsCount }} posts</div>
           </div>
-          <div class="user-rating"><mat-icon>star</mat-icon> {{ user.rating }}</div>
+          <div class="flex items-center gap-0.5 text-[0.82rem] font-semibold text-amber-400 shrink-0">
+            <mat-icon style="font-size:0.9rem;width:0.9rem;height:0.9rem">star</mat-icon>
+            {{ user.rating }}
+          </div>
         </a>
       }
     </div>

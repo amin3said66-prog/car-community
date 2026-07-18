@@ -1,27 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { finalize } from 'rxjs';
-
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatCardModule
-],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.scss'],
 })

@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { Post } from '../../models/post.model';
 import { PostService, NewComment } from '../post.service';
 
@@ -10,7 +11,7 @@ const GUEST_AVATAR = 'https://i.pravatar.cc/150?img=5';
 @Component({
   selector: 'app-post-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.scss'],
 })

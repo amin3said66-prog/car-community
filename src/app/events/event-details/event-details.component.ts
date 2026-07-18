@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { Event } from '../../models/event.model';
 import { EventService } from '../event.service';
 
@@ -9,7 +10,7 @@ const CURRENT_USER_ID = 'current-user';
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, MatIconModule],
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
 })

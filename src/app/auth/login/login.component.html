@@ -1,53 +1,55 @@
 <div class="auth-container">
   <div class="auth-card">
-    <h2>Welcome Back</h2>
+    <h2 class="auth-title">Welcome Back</h2>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <mat-form-field class="form-field">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email"
-          placeholder="you@example.com"
-          autocomplete="email" required>
-        @if (form.get('email')?.errors?.['required']) {
-          <mat-error>Email is required</mat-error>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5">
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="login-email">Email</label>
+        <input id="login-email" class="field-input" type="email"
+          formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="field-error">
+            @if (form.get('email')?.errors?.['required']) { Email is required }
+            @if (form.get('email')?.errors?.['email']) { Please enter a valid email }
+          </span>
         }
-        @if (form.get('email')?.errors?.['email']) {
-          <mat-error>Please enter a valid email address</mat-error>
-        }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field class="form-field">
-        <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'"
-          formControlName="password"
-          placeholder="Enter your password"
-          autocomplete="current-password" required>
-        <button mat-icon-button matSuffix type="button"
-          (click)="hidePassword = !hidePassword; $event.preventDefault()"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-          [attr.aria-pressed]="!hidePassword">
-          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        @if (form.get('password')?.errors?.['required']) {
-          <mat-error>Password is required</mat-error>
+      <!-- Password -->
+      <div class="flex flex-col gap-1.5">
+        <label class="field-label" for="login-password">Password</label>
+        <div class="relative">
+          <input id="login-password" class="field-input"
+            style="padding-right:2.75rem"
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password" />
+          <button type="button"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80 transition-colors bg-transparent border-0 cursor-pointer p-0 flex items-center"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'">
+            <mat-icon style="font-size:1.1rem;width:1.1rem;height:1.1rem">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <span class="field-error">
+            @if (form.get('password')?.errors?.['required']) { Password is required }
+            @if (form.get('password')?.errors?.['minlength']) { Minimum 6 characters }
+          </span>
         }
-        @if (form.get('password')?.errors?.['minlength']) {
-          <mat-error>Password must be at least 6 characters</mat-error>
-        }
-      </mat-form-field>
+      </div>
 
       @if (error) {
         <div class="error-message">{{ error }}</div>
       }
 
-      <div class="actions">
-        <button mat-raised-button color="primary" type="submit"
-          [disabled]="form.invalid || loading">
-          @if (loading) { <span>Logging in…</span> }
-          @if (!loading) { <span>Login</span> }
-          @if (loading) { <mat-spinner diameter="18"></mat-spinner> }
-        </button>
-      </div>
+      <button class="btn-gradient w-full justify-center py-3 text-base mt-1"
+        type="submit" [disabled]="form.invalid || loading">
+        @if (loading) { <span class="spin-ring"></span> Logging in… }
+        @else { Login }
+      </button>
     </form>
 
     <div class="auth-links">

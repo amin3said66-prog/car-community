@@ -3,25 +3,10 @@ import { AuthService } from '../auth.service';
 import { UpdateProfileRequest, UserProfile } from '../models/auth.models';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatCardModule
-],
+  imports: [ReactiveFormsModule],
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {
