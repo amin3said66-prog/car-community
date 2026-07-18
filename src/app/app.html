@@ -85,6 +85,34 @@
       <router-outlet />
     </main>
 
+    <!-- ── Footer ────────────────────────────────────────────────── -->
+    <footer class="shrink-0 border-t border-white/[.06] bg-[rgba(10,15,35,0.55)] backdrop-blur-sm">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 min-h-[52px]">
+
+        <!-- Brand -->
+        <a routerLink="/" class="inline-flex items-center gap-1.5 gradient-text font-bold no-underline text-sm shrink-0 tracking-tight">
+          <mat-icon style="font-size:1.1rem;width:1.1rem;height:1.1rem">directions_car</mat-icon>
+          CarCommunity
+        </a>
+
+        <!-- Copyright — year always current -->
+        <p class="text-[0.75rem] text-white/30 m-0 text-center order-last sm:order-none">
+          © {{ currentYear }} CarCommunity. All rights reserved.
+        </p>
+
+        <!-- Quick links -->
+        <nav class="flex items-center gap-4" aria-label="Footer navigation">
+          @for (link of navLinks; track link.path) {
+            <a [routerLink]="link.path"
+               class="text-[0.75rem] text-white/35 no-underline transition-colors hover:text-white/70 whitespace-nowrap">
+              {{ link.label }}
+            </a>
+          }
+        </nav>
+
+      </div>
+    </footer>
+
   </div>
 
 } @else {
