@@ -1,22 +1,18 @@
 <div class="auth-container">
-  <div class="auth-card mat-elevation-z4">
-    <h2>Login to Car Community</h2>
+  <div class="auth-card">
+    <h2>Welcome Back</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field class="form-field">
         <mat-label>Email</mat-label>
         <input matInput type="email" formControlName="email"
-          placeholder="Enter your email"
+          placeholder="you@example.com"
           autocomplete="email" required>
         @if (form.get('email')?.errors?.['required']) {
-          <mat-error>
-            Email is required
-          </mat-error>
+          <mat-error>Email is required</mat-error>
         }
         @if (form.get('email')?.errors?.['email']) {
-          <mat-error>
-            Please enter a valid email address
-          </mat-error>
+          <mat-error>Please enter a valid email address</mat-error>
         }
       </mat-form-field>
 
@@ -28,48 +24,35 @@
           autocomplete="current-password" required>
         <button mat-icon-button matSuffix type="button"
           (click)="hidePassword = !hidePassword; $event.preventDefault()"
-          class="visibility-toggle"
           [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
           [attr.aria-pressed]="!hidePassword">
-          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         @if (form.get('password')?.errors?.['required']) {
-          <mat-error>
-            Password is required
-          </mat-error>
+          <mat-error>Password is required</mat-error>
         }
         @if (form.get('password')?.errors?.['minlength']) {
-          <mat-error>
-            Password must be at least 6 characters
-          </mat-error>
+          <mat-error>Password must be at least 6 characters</mat-error>
         }
       </mat-form-field>
 
       @if (error) {
-        <div class="error-message mat-error">
-          {{ error }}
-        </div>
+        <div class="error-message">{{ error }}</div>
       }
 
       <div class="actions">
         <button mat-raised-button color="primary" type="submit"
           [disabled]="form.invalid || loading">
-          @if (!loading) {
-            <span>Login</span>
-          }
-          @if (loading) {
-            <span>Logging in...</span>
-          }
-          @if (loading) {
-            <mat-spinner diameter="20" class="spinner"></mat-spinner>
-          }
+          @if (loading) { <span>Logging in…</span> }
+          @if (!loading) { <span>Login</span> }
+          @if (loading) { <mat-spinner diameter="18"></mat-spinner> }
         </button>
       </div>
-
-      <div class="links">
-        <a routerLink="/auth/forgot-password">Forgot password?</a>
-        <a routerLink="/auth/register" color="accent">Create account</a>
-      </div>
     </form>
+
+    <div class="auth-links">
+      <a routerLink="/auth/forgot-password">Forgot password?</a>
+      <a routerLink="/auth/register" class="accent-link">Create an account</a>
+    </div>
   </div>
 </div>

@@ -6,18 +6,21 @@
 }
 
 @if (!loading && !car) {
-  <div class="not-found">
-    <div class="not-found-icon">🚗</div>
-    <h2>Car not found</h2>
-    <p>This car listing may have been removed.</p>
-    <a routerLink="/cars" class="back-btn">← Back to listings</a>
+  <div class="empty-state">
+    <div class="empty-icon"><mat-icon>directions_car</mat-icon></div>
+    <h3>Car not found</h3>
+    <p>This listing may have been removed.</p>
+    <a routerLink="/cars" class="btn-outline">
+      <mat-icon>arrow_back</mat-icon> Back to listings
+    </a>
   </div>
 }
 
 @if (!loading && car) {
   <div class="detail-wrap">
-    <!-- Back link -->
-    <a routerLink="/cars" class="back-link">← Back to listings</a>
+    <a routerLink="/cars" class="back-link">
+      <mat-icon>arrow_back</mat-icon> Back to listings
+    </a>
 
     <div class="detail-grid">
       <!-- Left: image + owner -->
@@ -25,24 +28,24 @@
         <div class="img-wrap">
           <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="detail-img" />
           @if (car.featured) {
-            <span class="featured-badge">⭐ Featured</span>
+            <span class="featured-badge"><mat-icon>star</mat-icon> Featured</span>
           }
         </div>
 
         <div class="owner-card">
           <img [src]="car.ownerImage" [alt]="car.owner" class="owner-img" />
-          <div>
+          <div class="owner-info">
             <div class="owner-name">{{ car.owner }}</div>
             <div class="owner-label">Owner / Seller</div>
           </div>
-          <a href="mailto:owner@example.com" class="contact-btn">Contact</a>
+          <a href="mailto:owner@example.com" class="btn-gradient contact-btn">Contact</a>
         </div>
       </div>
 
       <!-- Right: details -->
       <div class="right-col">
         <div class="make-model">{{ car.year }} {{ car.make }} {{ car.model }}</div>
-        <div class="price">\${{ car.price | number }}</div>
+        <div class="price">${{ car.price | number }}</div>
 
         <div class="badges">
           <span class="badge">{{ car.fuelType }}</span>
@@ -90,7 +93,10 @@
           <h3 class="section-label">Reviews ({{ car.reviews.length }})</h3>
           <div class="reviews-list">
             @for (review of car.reviews; track review) {
-              <div class="review-item">💬 {{ review }}</div>
+              <div class="review-item">
+                <mat-icon>chat_bubble</mat-icon>
+                {{ review }}
+              </div>
             }
           </div>
         }

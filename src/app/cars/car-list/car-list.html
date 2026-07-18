@@ -1,54 +1,57 @@
 <div class="page-header">
   <div>
-    <h1 class="page-title">🚗 Car Listings</h1>
-    <p class="page-sub">Browse {{ filtered.length }} amazing cars from enthusiasts</p>
+    <h1 class="page-title">
+      <mat-icon>directions_car</mat-icon> Car Listings
+    </h1>
+    <p class="page-sub">Browse {{ filtered.length }} cars from enthusiasts</p>
   </div>
-  <a routerLink="/cars/new" class="cta-btn">+ List Your Car</a>
+  <a routerLink="/cars/new" class="btn-gradient">
+    <mat-icon>add</mat-icon> List Your Car
+  </a>
 </div>
 
 <!-- Filters -->
 <div class="filters-bar">
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input
-      class="search-input"
-      type="text"
-      placeholder="Search by make, model or colour…"
-      [(ngModel)]="search"
-      (ngModelChange)="applyFilters()"
-    />
+    <span class="search-icon"><mat-icon>search</mat-icon></span>
+    <input class="search-input" type="text" placeholder="Search by make, model or colour…"
+      [(ngModel)]="search" (ngModelChange)="applyFilters()" />
   </div>
 
   <select class="select-filter" [(ngModel)]="fuelFilter" (ngModelChange)="applyFilters()">
     <option value="">All fuel types</option>
-    <option value="petrol">⛽ Petrol</option>
-    <option value="diesel">🛢️ Diesel</option>
-    <option value="hybrid">🌿 Hybrid</option>
-    <option value="electric">⚡ Electric</option>
+    <option value="petrol">Petrol</option>
+    <option value="diesel">Diesel</option>
+    <option value="hybrid">Hybrid</option>
+    <option value="electric">Electric</option>
   </select>
 
   @if (search || fuelFilter) {
-    <button class="clear-btn" (click)="clearFilters()">✕ Clear</button>
+    <button class="clear-btn" (click)="clearFilters()">
+      <mat-icon>close</mat-icon> Clear
+    </button>
   }
 </div>
 
-<!-- Loading -->
+<!-- Skeleton loading -->
 @if (loading) {
-  <div class="loading-grid">
+  <div class="cars-grid">
     @for (n of [1,2,3,4,5,6]; track n) {
       <div class="skeleton-card"></div>
     }
   </div>
 }
 
-<!-- Cars Grid -->
+<!-- Grid -->
 @if (!loading) {
   @if (filtered.length === 0) {
     <div class="empty-state">
-      <div class="empty-icon">🚫</div>
+      <div class="empty-icon"><mat-icon>search_off</mat-icon></div>
       <h3>No cars found</h3>
       <p>Try adjusting your search or filters</p>
-      <button class="clear-btn" (click)="clearFilters()">Clear filters</button>
+      <button class="clear-btn" (click)="clearFilters()">
+        <mat-icon>close</mat-icon> Clear filters
+      </button>
     </div>
   }
 
@@ -56,7 +59,7 @@
     @for (car of filtered; track car.id) {
       <a [routerLink]="['/cars', car.id]" class="car-card">
         @if (car.featured) {
-          <span class="featured-badge">⭐ Featured</span>
+          <span class="featured-badge"><mat-icon>star</mat-icon> Featured</span>
         }
         <div class="car-img-wrap">
           <img [src]="car.image" [alt]="car.make + ' ' + car.model" class="car-img" loading="lazy" />
@@ -64,14 +67,17 @@
         <div class="car-body">
           <div class="car-title-row">
             <h3 class="car-title">{{ car.year }} {{ car.make }} {{ car.model }}</h3>
-            <span class="fuel-badge">{{ fuelIcon(car.fuelType) }} {{ car.fuelType }}</span>
+            <span class="fuel-badge">
+              <mat-icon>{{ fuelIcon(car.fuelType) }}</mat-icon>
+              {{ car.fuelType }}
+            </span>
           </div>
           <p class="car-color">{{ car.color }} · {{ car.transmission }}</p>
           <p class="car-desc">{{ car.description | slice:0:90 }}…</p>
 
           <div class="car-footer">
             <div>
-              <div class="car-price">\${{ car.price | number }}</div>
+              <div class="car-price">${{ car.price | number }}</div>
               <div class="car-mileage">{{ car.mileage | number }} km</div>
             </div>
             <div class="car-rating">
