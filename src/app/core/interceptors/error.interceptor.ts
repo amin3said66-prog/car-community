@@ -1,6 +1,6 @@
 /**
  * Error Interceptor
- * Handles HTTP errors globally
+ * Handles HTTP errors globally and normalises them into a consistent shape.
  */
 import { Injectable } from '@angular/core';
 import {
@@ -13,51 +13,40 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+export interface HttpErrorPayload {
+  status: number;
+  message: string;
+  error: unknown;
+}
+
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor() {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        const errorMessage = this.getErrorMessage(error);
-
-        console.error('HTTP Error:', {
-          status: error.status,
-          message: errorMessage,
-          url: error.url,
-        });
-
-        return throwError(() => ({
-          status: error.status,
-          message: errorMessage,
-          error: error.error,
-        }));
+        const message = this.getErrorMessage(error);
+        const payload: HttpErrorPayload = { status: error.status, message, error: error.error };
+        return throwError(() => payload);
       })
     );
   }
 
   private getErrorMessage(error: HttpErrorResponse): string {
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       return error.error.message;
-    } else {
-      // Server-side error
-      if (error.status === 0) {
-        return 'Unable to connect to server';
-      } else if (error.status === 400) {
-        return error.error?.message || 'Bad request';
-      } else if (error.status === 401) {
-        return 'Unauthorized. Please login again.';
-      } else if (error.status === 403) {
-        return 'Access forbidden';
-      } else if (error.status === 404) {
-        return 'Resource not found';
-      } else if (error.status === 500) {
-        return 'Server error. Please try again later.';
-      } else {
-        return `Error: ${error.statusText || 'Unknown error'}`;
-      }
+    }
+
+    switch (error.status) {
+      case 0:   return 'Unable to connect to server';
+      case 400: return (error.error as { message?: string })?.message ?? 'Bad request';
+      case 401: return 'Unauthorized. Please login again.';
+      case 403: return 'Access forbidden';
+      case 404: return 'Resource not found';
+      case 500: return 'Server error. Please try again later.';
+      default:  return error.statusText || 'Unknown error';
     }
   }
 }

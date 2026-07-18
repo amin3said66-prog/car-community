@@ -1,27 +1,31 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CarService } from '../car.service';
 import { Car } from '../../models/car.model';
 
+const PLACEHOLDER_IMAGE =
+  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=500&h=400&fit=crop';
+
 @Component({
   selector: 'app-car-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './car-form.html',
-  styleUrls: ['./car-form.scss']
+  styleUrls: ['./car-form.scss'],
 })
 export class CarFormComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly carService = inject(CarService);
+  private readonly router = inject(Router);
+
   carForm: FormGroup;
   loading = false;
   success = false;
+  error: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private carService: CarService,
-    private router: Router
-  ) {
+  constructor() {
     this.carForm = this.fb.group({
       make:         ['', Validators.required],
       model:        ['', Validators.required],
@@ -32,7 +36,7 @@ export class CarFormComponent {
       fuelType:     ['petrol', Validators.required],
       transmission: ['automatic', Validators.required],
       description:  ['', [Validators.required, Validators.minLength(20)]],
-      image:        ['https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=500&h=400&fit=crop']
+      image:        [PLACEHOLDER_IMAGE],
     });
   }
 
@@ -43,14 +47,15 @@ export class CarFormComponent {
     }
 
     this.loading = true;
-    const formVal = this.carForm.value;
+    this.error = null;
+    const formVal = this.carForm.value as Partial<Car>;
 
     const newCar: Car = {
-      ...formVal,
+      ...(formVal as Car),
       id: '',
       owner: 'You',
       ownerId: 'current-user',
-      ownerImage: 'https://i.pravatar.cc/150?img=10',
+      ownerImage: PLACEHOLDER_IMAGE,
       rating: 0,
       reviews: [],
       createdAt: new Date(),
@@ -64,13 +69,19 @@ export class CarFormComponent {
         this.success = true;
         setTimeout(() => this.router.navigate(['/cars']), 1800);
       },
-      error: (err: unknown) => {
-        console.error('Failed to create car:', err);
+      error: () => {
+        this.error = 'Failed to create listing. Please try again.';
         this.loading = false;
-      }
+      },
     });
   }
 
-  field(name: string) { return this.carForm.get(name); }
-  isInvalid(name: string) { const f = this.field(name); return f?.invalid && f?.touched; }
+  field(name: string): AbstractControl | null {
+    return this.carForm.get(name);
+  }
+
+  isInvalid(name: string): boolean {
+    const f = this.field(name);
+    return !!(f?.invalid && f.touched);
+  }
 }

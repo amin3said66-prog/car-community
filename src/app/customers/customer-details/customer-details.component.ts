@@ -1,50 +1,65 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { User } from '../../models/user.model';
-import { MOCK_USERS } from '../../data/mock-users';
+import { CustomerService } from '../customer.service';
 
 @Component({
   selector: 'app-customer-details',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './customer-details.component.html',
-  styleUrls: ['./customer-details.component.scss']
+  styleUrls: ['./customer-details.component.scss'],
 })
 export class CustomerDetailsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly customerService = inject(CustomerService);
+
   user: User | null = null;
   loading = false;
+  notFound = false;
   isFollowing = false;
 
-  constructor(private route: ActivatedRoute) {}
-
   ngOnInit(): void {
-    this.loading = true;
-    this.route.params.subscribe((params: any) => {
-      const userId = params['id'];
-      if (userId) {
-        const found = MOCK_USERS.find(u => u.id === userId);
-        if (found) {
-          this.user = found;
-        }
-        this.loading = false;
+    this.route.params.subscribe((params: Params) => {
+      const userId = params['id'] as string | undefined;
+      if (!userId) {
+        this.notFound = true;
+        return;
       }
+
+      this.loading = true;
+      this.customerService.getById(userId).subscribe({
+        next: (user: User | undefined) => {
+          this.user = user ?? null;
+          this.notFound = !user;
+          this.loading = false;
+        },
+        error: () => {
+          this.notFound = true;
+          this.loading = false;
+        },
+      });
     });
   }
 
   toggleFollow(): void {
-    if (this.user) {
-      if (this.isFollowing) {
-        if (this.user.followers) this.user.followers--;
-      } else {
-        if (!this.user.followers) this.user.followers = 0;
-        this.user.followers++;
+    if (!this.user) return;
+
+    const action = this.isFollowing
+      ? this.customerService.unfollow(this.user.id)
+      : this.customerService.follow(this.user.id);
+
+    action.subscribe(updated => {
+      if (updated) {
+        this.user = updated;
+        this.isFollowing = !this.isFollowing;
       }
-      this.isFollowing = !this.isFollowing;
-    }
+    });
   }
 
   stars(rating: number): string {
-    return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+    const rounded = Math.round(rating);
+    return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
   }
 }

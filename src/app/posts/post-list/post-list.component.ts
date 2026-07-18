@@ -1,35 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MOCK_POSTS } from '../../data/mock-posts';
 import { Post } from '../../models/post.model';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.scss']
+  styleUrls: ['./post-list.component.scss'],
 })
 export class PostListComponent implements OnInit {
+  private readonly postService = inject(PostService);
+
   posts: Post[] = [];
   filtered: Post[] = [];
   search = '';
   activeCategory = '';
+  error: string | null = null;
 
-  categories = ['', 'discussion', 'advice', 'news', 'showcase'];
+  readonly categories = ['', 'discussion', 'advice', 'news', 'showcase'];
 
   ngOnInit(): void {
-    this.posts = MOCK_POSTS;
-    this.filtered = MOCK_POSTS;
+    this.postService.getAll().subscribe({
+      next: (posts: Post[]) => {
+        this.posts = posts;
+        this.filtered = posts;
+      },
+      error: () => {
+        this.error = 'Failed to load posts. Please try again.';
+      },
+    });
   }
 
   applyFilters(): void {
     let result = this.posts;
     if (this.search.trim()) {
       const q = this.search.toLowerCase();
-      result = result.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+      result = result.filter(
+        p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q)
+      );
     }
     if (this.activeCategory) {
       result = result.filter(p => p.category === this.activeCategory);
@@ -49,6 +61,6 @@ export class PostListComponent implements OnInit {
 
   likePost(post: Post, e: Event): void {
     e.preventDefault();
-    post.likes++;
+    this.postService.likePost(post.id).subscribe();
   }
 }

@@ -1,35 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { Event } from '../../models/event.model';
-import { MOCK_EVENTS } from '../../data/mock-events';
+import { EventService } from '../event.service';
+
+const CURRENT_USER_ID = 'current-user';
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './event-details.component.html',
-  styleUrls: ['./event-details.component.scss']
+  styleUrls: ['./event-details.component.scss'],
 })
 export class EventDetailsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly eventService = inject(EventService);
+
   event: Event | null = null;
   loading = false;
+  notFound = false;
   isAttending = false;
 
-  constructor(private route: ActivatedRoute) {}
-
   ngOnInit(): void {
-    this.loading = true;
-    this.route.params.subscribe((params: any) => {
-      const eventId = params['id'];
-      if (eventId) {
-        const found = MOCK_EVENTS.find(e => e.id === eventId);
-        if (found) {
-          this.event = found;
-          this.isAttending = found.attendees.includes('current-user');
-        }
-        this.loading = false;
+    this.route.params.subscribe((params: Params) => {
+      const eventId = params['id'] as string | undefined;
+      if (!eventId) {
+        this.notFound = true;
+        return;
       }
+
+      this.loading = true;
+      this.eventService.getById(eventId).subscribe({
+        next: (event: Event | undefined) => {
+          this.event = event ?? null;
+          this.notFound = !event;
+          this.isAttending = event?.attendees.includes(CURRENT_USER_ID) ?? false;
+          this.loading = false;
+        },
+        error: () => {
+          this.notFound = true;
+          this.loading = false;
+        },
+      });
     });
   }
 
@@ -39,7 +52,12 @@ export class EventDetailsComponent implements OnInit {
   }
 
   statusClass(status: string): string {
-    const map: Record<string, string> = { upcoming: 'upcoming', ongoing: 'ongoing', completed: 'completed', cancelled: 'cancelled' };
+    const map: Record<string, string> = {
+      upcoming: 'upcoming',
+      ongoing: 'ongoing',
+      completed: 'completed',
+      cancelled: 'cancelled',
+    };
     return map[status] ?? '';
   }
 
@@ -48,18 +66,17 @@ export class EventDetailsComponent implements OnInit {
   }
 
   toggleAttend(): void {
-    if (this.event) {
-      if (this.isAttending) {
-        const idx = this.event.attendees.indexOf('current-user');
-        if (idx > -1) {
-          this.event.attendees.splice(idx, 1);
-        }
-      } else {
-        if (this.event.attendees.length < this.event.maxAttendees) {
-          this.event.attendees.push('current-user');
-        }
+    if (!this.event) return;
+
+    const action = this.isAttending
+      ? this.eventService.unregisterAttendee(this.event.id, CURRENT_USER_ID)
+      : this.eventService.registerAttendee(this.event.id, CURRENT_USER_ID);
+
+    action.subscribe(updated => {
+      if (updated) {
+        this.event = updated;
+        this.isAttending = updated.attendees.includes(CURRENT_USER_ID);
       }
-      this.isAttending = !this.isAttending;
-    }
+    });
   }
 }

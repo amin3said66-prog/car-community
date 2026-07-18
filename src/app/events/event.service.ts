@@ -1,211 +1,139 @@
 /**
  * Event Service
- * Manages community events and registrations
+ * Manages community events and registrations.
  */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { Event } from '../models/event.model';
 import { MOCK_EVENTS } from '../data/mock-events';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class EventService {
-  private baseUrl = environment.apiUrl + '/events';
-  private events$ = new BehaviorSubject<Event[]>(MOCK_EVENTS);
+  private readonly events$ = new BehaviorSubject<Event[]>(MOCK_EVENTS);
 
-  constructor(private http: HttpClient) {}
-
-  /**
-   * Get all events
-   */
   getAll(): Observable<Event[]> {
     return of(this.events$.value);
   }
 
-  /**
-   * Get event by ID
-   */
-  getById(id: string): Observable<Event> {
-    const event = this.events$.value.find(e => e.id === id);
-    return of(event!);
+  getById(id: string): Observable<Event | undefined> {
+    return of(this.events$.value.find(e => e.id === id));
   }
 
-  /**
-   * Get events by category
-   */
   getByCategory(category: string): Observable<Event[]> {
-    const filtered = this.events$.value.filter(e => e.category === category);
-    return of(filtered);
+    return of(this.events$.value.filter(e => e.category === category));
   }
 
-  /**
-   * Get events by organizer
-   */
   getByOrganizer(organizerId: string): Observable<Event[]> {
-    const filtered = this.events$.value.filter(e => e.organizerId === organizerId);
-    return of(filtered);
+    return of(this.events$.value.filter(e => e.organizerId === organizerId));
   }
 
-  /**
-   * Get upcoming events
-   */
   getUpcoming(): Observable<Event[]> {
     const now = new Date();
-    const upcoming = this.events$.value
-      .filter(e => new Date(e.date) > now && e.status === 'upcoming')
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    return of(upcoming);
+    return of(
+      this.events$.value
+        .filter(e => new Date(e.date) > now && e.status === 'upcoming')
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    );
   }
 
-  /**
-   * Get past events
-   */
   getPast(): Observable<Event[]> {
     const now = new Date();
-    const past = this.events$.value
-      .filter(e => new Date(e.date) < now && e.status === 'completed')
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return of(past);
+    return of(
+      this.events$.value
+        .filter(e => new Date(e.date) < now && e.status === 'completed')
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    );
   }
 
-  /**
-   * Search events by title or location
-   */
   search(query: string): Observable<Event[]> {
-    const results = this.events$.value.filter(event =>
-      event.title.toLowerCase().includes(query.toLowerCase()) ||
-      event.location.toLowerCase().includes(query.toLowerCase())
+    const q = query.toLowerCase();
+    return of(
+      this.events$.value.filter(
+        e => e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q)
+      )
     );
-    return of(results);
   }
 
-  /**
-   * Get events by price range
-   */
   filterByPrice(minPrice: number, maxPrice: number): Observable<Event[]> {
-    const filtered = this.events$.value.filter(e =>
-      e.price >= minPrice && e.price <= maxPrice
-    );
-    return of(filtered);
+    return of(this.events$.value.filter(e => e.price >= minPrice && e.price <= maxPrice));
   }
 
-  /**
-   * Create new event
-   */
   create(data: Partial<Event>): Observable<Event> {
     const newEvent: Event = {
       id: `event-${Date.now()}`,
-      title: data.title || '',
-      description: data.description || '',
-      image: data.image || '',
-      location: data.location || '',
-      date: data.date || new Date(),
-      time: data.time || '',
-      organizer: data.organizer || '',
-      organizerId: data.organizerId || '',
-      organizerImage: data.organizerImage || '',
+      title: data.title ?? '',
+      description: data.description ?? '',
+      image: data.image ?? '',
+      location: data.location ?? '',
+      date: data.date ?? new Date(),
+      time: data.time ?? '',
+      organizer: data.organizer ?? '',
+      organizerId: data.organizerId ?? '',
+      organizerImage: data.organizerImage ?? '',
       attendees: [],
-      maxAttendees: data.maxAttendees || 50,
-      category: data.category || 'meetup',
-      price: data.price || 0,
+      maxAttendees: data.maxAttendees ?? 50,
+      category: data.category ?? 'meetup',
+      price: data.price ?? 0,
       status: 'upcoming',
     };
-
-    const currentEvents = this.events$.value;
-    this.events$.next([...currentEvents, newEvent]);
+    this.events$.next([...this.events$.value, newEvent]);
     return of(newEvent);
   }
 
-  /**
-   * Update event
-   */
-  update(id: string, data: Partial<Event>): Observable<Event> {
-    const currentEvents = this.events$.value;
-    const index = currentEvents.findIndex(e => e.id === id);
+  update(id: string, data: Partial<Event>): Observable<Event | undefined> {
+    const events = this.events$.value;
+    const index = events.findIndex(e => e.id === id);
+    if (index === -1) return of(undefined);
 
-    if (index > -1) {
-      const updatedEvent: Event = {
-        ...currentEvents[index],
-        ...data,
-      };
-      currentEvents[index] = updatedEvent;
-      this.events$.next([...currentEvents]);
-      return of(updatedEvent);
-    }
-
-    return of(data as Event);
+    const updatedEvent: Event = { ...events[index], ...data };
+    const updated = [...events];
+    updated[index] = updatedEvent;
+    this.events$.next(updated);
+    return of(updatedEvent);
   }
 
-  /**
-   * Delete event
-   */
   delete(id: string): Observable<void> {
-    const currentEvents = this.events$.value;
-    this.events$.next(currentEvents.filter(e => e.id !== id));
-    return of(void 0);
+    this.events$.next(this.events$.value.filter(e => e.id !== id));
+    return of(undefined);
   }
 
-  /**
-   * Register user for event
-   */
-  registerAttendee(eventId: string, userId: string): Observable<Event> {
-    const currentEvents = this.events$.value;
-    const event = currentEvents.find(e => e.id === eventId);
+  registerAttendee(eventId: string, userId: string): Observable<Event | undefined> {
+    const events = this.events$.value;
+    const index = events.findIndex(e => e.id === eventId);
+    if (index === -1) return of(undefined);
 
-    if (event && event.attendees.length < event.maxAttendees) {
-      if (!event.attendees.includes(userId)) {
-        event.attendees.push(userId);
-        this.events$.next([...currentEvents]);
-      }
+    const event = events[index];
+    if (event.attendees.includes(userId) || event.attendees.length >= event.maxAttendees) {
       return of(event);
     }
 
-    return of({} as Event);
+    const updated = [...events];
+    updated[index] = { ...event, attendees: [...event.attendees, userId] };
+    this.events$.next(updated);
+    return of(updated[index]);
   }
 
-  /**
-   * Unregister user from event
-   */
-  unregisterAttendee(eventId: string, userId: string): Observable<Event> {
-    const currentEvents = this.events$.value;
-    const event = currentEvents.find(e => e.id === eventId);
+  unregisterAttendee(eventId: string, userId: string): Observable<Event | undefined> {
+    const events = this.events$.value;
+    const index = events.findIndex(e => e.id === eventId);
+    if (index === -1) return of(undefined);
 
-    if (event) {
-      event.attendees = event.attendees.filter(id => id !== userId);
-      this.events$.next([...currentEvents]);
-      return of(event);
-    }
-
-    return of({} as Event);
+    const event = events[index];
+    const updated = [...events];
+    updated[index] = { ...event, attendees: event.attendees.filter(id => id !== userId) };
+    this.events$.next(updated);
+    return of(updated[index]);
   }
 
-  /**
-   * Get attendee count for event
-   */
   getAttendeeCount(eventId: string): Observable<number> {
-    const event = this.events$.value.find(e => e.id === eventId);
-    return of(event?.attendees.length || 0);
+    return of(this.events$.value.find(e => e.id === eventId)?.attendees.length ?? 0);
   }
 
-  /**
-   * Check if user is registered for event
-   */
   isUserRegistered(eventId: string, userId: string): Observable<boolean> {
-    const event = this.events$.value.find(e => e.id === eventId);
-    const isRegistered = event?.attendees.includes(userId) || false;
-    return of(isRegistered);
+    return of(this.events$.value.find(e => e.id === eventId)?.attendees.includes(userId) ?? false);
   }
 
-  /**
-   * Get events attended by user
-   */
   getEventsByAttendee(userId: string): Observable<Event[]> {
-    const userEvents = this.events$.value.filter(e =>
-      e.attendees.includes(userId)
-    );
-    return of(userEvents);
+    return of(this.events$.value.filter(e => e.attendees.includes(userId)));
   }
 }

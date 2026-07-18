@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { UserProfile } from '../models/auth.models';
+import { UpdateProfileRequest, UserProfile } from '../models/auth.models';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,6 @@ import { MatCardModule } from '@angular/material/card';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
@@ -22,39 +21,65 @@ import { MatCardModule } from '@angular/material/card';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatCardModule
-  ],
-  templateUrl: './profile.component.html'
+],
+  templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {
+  private readonly auth = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
+
   profile: UserProfile | null = null;
   formReady = false;
+  loading = false;
+  saveMessage: string | null = null;
+  error: string | null = null;
+
   form: FormGroup;
 
-  constructor(private auth: AuthService, private fb: FormBuilder) {
+  constructor() {
     this.form = this.fb.group({
       fullName: [''],
-      email: [{value: '', disabled: true}],
-      phoneNumber: ['']
+      email: [{ value: '', disabled: true }],
+      phoneNumber: [''],
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.auth.getProfile().subscribe({
-      next: (p) => {
+      next: (p: UserProfile) => {
         this.profile = p;
         this.form.patchValue({
-          fullName: p.fullName,
-          email: p.email,
-          phoneNumber: (p as any).phoneNumber || ''
+          fullName: p.fullName ?? '',
+          email: p.email ?? '',
+          phoneNumber: p.phoneNumber ?? '',
         });
         this.formReady = true;
-      }
+      },
+      error: () => {
+        this.error = 'Failed to load profile. Please try again.';
+      },
     });
   }
 
-  save() {
-    // Implement update profile backend call (e.g., /api/auth/profile/update)
-    // placeholder for now
-    alert('Save profile: implement API endpoint to persist changes.');
+  save(): void {
+    this.saveMessage = null;
+    this.error = null;
+    this.loading = true;
+
+    const payload: UpdateProfileRequest = {
+      fullName: this.form.value.fullName as string,
+      phoneNumber: this.form.value.phoneNumber as string,
+    };
+
+    this.auth.updateProfile(payload).subscribe({
+      next: () => {
+        this.loading = false;
+        this.saveMessage = 'Profile updated successfully.';
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'Failed to save profile. Please try again.';
+      },
+    });
   }
 }

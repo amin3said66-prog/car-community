@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,18 +10,19 @@ import { Car } from '../../models/car.model';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './car-list.html',
-  styleUrls: ['./car-list.scss']
+  styleUrls: ['./car-list.scss'],
 })
 export class CarListComponent implements OnInit {
+  private readonly carService = inject(CarService);
+
   cars: Car[] = [];
   filtered: Car[] = [];
   loading = false;
+  error: string | null = null;
   search = '';
   fuelFilter = '';
 
-  fuelTypes = ['', 'petrol', 'diesel', 'hybrid', 'electric'];
-
-  constructor(private carService: CarService) {}
+  readonly fuelTypes = ['', 'petrol', 'diesel', 'hybrid', 'electric'];
 
   ngOnInit(): void {
     this.loading = true;
@@ -31,10 +32,10 @@ export class CarListComponent implements OnInit {
         this.filtered = cars;
         this.loading = false;
       },
-      error: (err: unknown) => {
-        console.error('Failed to load cars:', err);
+      error: () => {
+        this.error = 'Failed to load cars. Please try again.';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -42,10 +43,11 @@ export class CarListComponent implements OnInit {
     let result = this.cars;
     if (this.search.trim()) {
       const q = this.search.toLowerCase();
-      result = result.filter(c =>
-        c.make.toLowerCase().includes(q) ||
-        c.model.toLowerCase().includes(q) ||
-        c.color.toLowerCase().includes(q)
+      result = result.filter(
+        c =>
+          c.make.toLowerCase().includes(q) ||
+          c.model.toLowerCase().includes(q) ||
+          c.color.toLowerCase().includes(q)
       );
     }
     if (this.fuelFilter) {
@@ -66,6 +68,7 @@ export class CarListComponent implements OnInit {
   }
 
   stars(rating: number): string {
-    return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+    const rounded = Math.round(rating);
+    return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
   }
 }

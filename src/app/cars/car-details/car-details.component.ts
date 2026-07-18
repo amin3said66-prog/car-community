@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { CarService } from '../car.service';
 import { Car } from '../../models/car.model';
 
@@ -9,33 +9,36 @@ import { Car } from '../../models/car.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './car-details.html',
-  styleUrls: ['./car-details.scss']
+  styleUrls: ['./car-details.scss'],
 })
 export class CarDetailsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly carService = inject(CarService);
+
   car: Car | null = null;
   loading = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private carService: CarService
-  ) {}
+  notFound = false;
 
   ngOnInit(): void {
-    this.loading = true;
-    this.route.params.subscribe((params: any) => {
-      const carId = params['id'];
-      if (carId) {
-        this.carService.getById(carId).subscribe({
-          next: (car: Car) => {
-            this.car = car;
-            this.loading = false;
-          },
-          error: (err: unknown) => {
-            console.error('Failed to load car:', err);
-            this.loading = false;
-          }
-        });
+    this.route.params.subscribe((params: Params) => {
+      const carId = params['id'] as string | undefined;
+      if (!carId) {
+        this.notFound = true;
+        return;
       }
+
+      this.loading = true;
+      this.carService.getById(carId).subscribe({
+        next: (car: Car | undefined) => {
+          this.car = car ?? null;
+          this.notFound = !car;
+          this.loading = false;
+        },
+        error: () => {
+          this.notFound = true;
+          this.loading = false;
+        },
+      });
     });
   }
 }

@@ -1,8 +1,8 @@
 /**
  * Token Interceptor
- * Automatically adds authorization token to HTTP requests
+ * Automatically adds the authorization token to outgoing HTTP requests.
  */
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -16,59 +16,58 @@ import { AuthService } from '../../auth/auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  private readonly authService = inject(AuthService);
+
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private readonly refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-  constructor(private authService: AuthService) {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
 
-    if (token && this.isPublicUrl(request.url) === false) {
+    if (token && !this.isPublicUrl(request.url)) {
       request = this.addToken(request, token);
     }
 
     return next.handle(request).pipe(
-      catchError((error) => {
+      catchError(error => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
           return this.handle401Error(request, next);
-        } else {
-          return throwError(() => error);
         }
+        return throwError(() => error);
       })
     );
   }
 
-  private addToken(request: HttpRequest<any>, token: string) {
-    return request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  private addToken(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+    return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   }
 
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  private handle401Error(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      // In a real app, you would call a refresh token endpoint here
-      // For now, we'll just logout
+      // No refresh-token endpoint in this app — log out the user.
       this.authService.logout();
+      this.isRefreshing = false;
       return throwError(() => new Error('Unauthorized'));
-    } else {
-      return this.refreshTokenSubject.pipe(
-        filter((result) => result != null),
-        take(1),
-        switchMap((res) => {
-          return next.handle(this.addToken(request, res.token));
-        })
-      );
     }
+
+    return this.refreshTokenSubject.pipe(
+      filter((token): token is string => token !== null),
+      take(1),
+      switchMap(token => next.handle(this.addToken(request, token)))
+    );
   }
 
   private isPublicUrl(url: string): boolean {
-    const publicUrls = ['/login', '/register', '/forgot-password'];
-    return publicUrls.some((publicUrl) => url.includes(publicUrl));
+    const publicPaths = ['/auth/login', '/auth/register', '/auth/forgot-password'];
+    return publicPaths.some(path => url.includes(path));
   }
 }
