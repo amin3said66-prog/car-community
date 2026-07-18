@@ -17,13 +17,13 @@
       <!-- Make & Model -->
       <div class="row-2">
         <div class="field-group">
-          <label class="field-label">Make *</label>
-          <input class="field-input" formControlName="make" placeholder="e.g. Toyota" />
+          <label class="field-label" for="make">Make *</label>
+          <input id="make" class="field-input" formControlName="make" placeholder="e.g. Toyota" />
           @if (isInvalid('make')) { <span class="err">Make is required</span> }
         </div>
         <div class="field-group">
-          <label class="field-label">Model *</label>
-          <input class="field-input" formControlName="model" placeholder="e.g. Supra" />
+          <label class="field-label" for="model">Model *</label>
+          <input id="model" class="field-input" formControlName="model" placeholder="e.g. Supra" />
           @if (isInvalid('model')) { <span class="err">Model is required</span> }
         </div>
       </div>
@@ -31,13 +31,13 @@
       <!-- Year & Price -->
       <div class="row-2">
         <div class="field-group">
-          <label class="field-label">Year *</label>
-          <input class="field-input" type="number" formControlName="year" placeholder="2023" />
+          <label class="field-label" for="year">Year *</label>
+          <input id="year" class="field-input" type="number" formControlName="year" placeholder="2023" />
           @if (isInvalid('year')) { <span class="err">Valid year required</span> }
         </div>
         <div class="field-group">
-          <label class="field-label">Price (USD) *</label>
-          <input class="field-input" type="number" formControlName="price" placeholder="45000" />
+          <label class="field-label" for="price">Price (USD) *</label>
+          <input id="price" class="field-input" type="number" formControlName="price" placeholder="45000" />
           @if (isInvalid('price')) { <span class="err">Price is required</span> }
         </div>
       </div>
@@ -45,13 +45,13 @@
       <!-- Mileage & Colour -->
       <div class="row-2">
         <div class="field-group">
-          <label class="field-label">Mileage (km) *</label>
-          <input class="field-input" type="number" formControlName="mileage" placeholder="15000" />
+          <label class="field-label" for="mileage">Mileage (km) *</label>
+          <input id="mileage" class="field-input" type="number" formControlName="mileage" placeholder="15000" />
           @if (isInvalid('mileage')) { <span class="err">Mileage is required</span> }
         </div>
         <div class="field-group">
-          <label class="field-label">Colour *</label>
-          <input class="field-input" formControlName="color" placeholder="e.g. Pearl White" />
+          <label class="field-label" for="color">Colour *</label>
+          <input id="color" class="field-input" formControlName="color" placeholder="e.g. Pearl White" />
           @if (isInvalid('color')) { <span class="err">Colour is required</span> }
         </div>
       </div>
@@ -59,8 +59,8 @@
       <!-- Fuel Type & Transmission -->
       <div class="row-2">
         <div class="field-group">
-          <label class="field-label">Fuel Type *</label>
-          <select class="field-select" formControlName="fuelType">
+          <label class="field-label" for="fuelType">Fuel Type *</label>
+          <select id="fuelType" class="field-select" formControlName="fuelType">
             <option value="petrol">⛽ Petrol</option>
             <option value="diesel">🛢️ Diesel</option>
             <option value="hybrid">🌿 Hybrid</option>
@@ -68,8 +68,8 @@
           </select>
         </div>
         <div class="field-group">
-          <label class="field-label">Transmission *</label>
-          <select class="field-select" formControlName="transmission">
+          <label class="field-label" for="transmission">Transmission *</label>
+          <select id="transmission" class="field-select" formControlName="transmission">
             <option value="automatic">Automatic</option>
             <option value="manual">Manual</option>
           </select>
@@ -78,14 +78,14 @@
 
       <!-- Image URL -->
       <div class="field-group">
-        <label class="field-label">Image URL</label>
-        <input class="field-input" formControlName="image" placeholder="https://…" />
+        <label class="field-label" for="image">Image URL</label>
+        <input id="image" class="field-input" formControlName="image" placeholder="https://…" />
       </div>
 
       <!-- Description -->
       <div class="field-group">
-        <label class="field-label">Description *</label>
-        <textarea class="field-textarea" formControlName="description" rows="4"
+        <label class="field-label" for="description">Description *</label>
+        <textarea id="description" class="field-textarea" formControlName="description" rows="4"
           placeholder="Describe your car — condition, features, history…"></textarea>
         @if (isInvalid('description')) {
           <span class="err">Description must be at least 20 characters</span>

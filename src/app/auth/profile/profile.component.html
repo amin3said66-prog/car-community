@@ -1,24 +1,24 @@
-<div *ngIf="!formReady">Loading...</div>
+@if (!formReady) {
+  <div>Loading...</div>
+}
 
-<div *ngIf="formReady" class="profile-card">
-  <h2>Profile</h2>
-
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <mat-form-field class="form-field">
-      <mat-label>Full name</mat-label>
-      <input matInput formControlName="fullName" placeholder="Enter your full name" />
-    </mat-form-field>
-
-    <mat-form-field class="form-field">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" placeholder="Your email address" readonly />
-    </mat-form-field>
-
-    <mat-form-field class="form-field">
-      <mat-label>Phone</mat-label>
-      <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" />
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit">Save</button>
-  </form>
-</div>
+@if (formReady) {
+  <div class="profile-card">
+    <h2>Profile</h2>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-form-field class="form-field">
+        <mat-label>Full name</mat-label>
+        <input matInput formControlName="fullName" placeholder="Enter your full name" />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Your email address" readonly />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </form>
+  </div>
+}

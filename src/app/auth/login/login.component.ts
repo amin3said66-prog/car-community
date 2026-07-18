@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,6 @@ import { LoginRequest } from '../models/auth.models';
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterLink,
     MatInputModule,
@@ -24,50 +23,61 @@ import { LoginRequest } from '../models/auth.models';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatCardModule
-  ],
+],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
   form: FormGroup;
   hidePassword = true;
-
   loading = false;
   error: string | null = null;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  submit() {
+  submit(): void {
     this.error = null;
     if (this.form.invalid) return;
+
     this.loading = true;
     const payload: LoginRequest = {
-      email: this.form.value.email!,
-      password: this.form.value.password!
+      email: this.form.value.email as string,
+      password: this.form.value.password as string,
     };
+
     this.auth.login(payload).subscribe({
       next: () => {
         this.loading = false;
         this.router.navigate(['/dashboard']);
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
         this.loading = false;
-        // Handle different error types
-        if (err?.error?.message) {
-          this.error = err.error.message;
-        } else if (err?.message) {
-          this.error = err.message;
-        } else if (typeof err === 'string') {
-          this.error = err;
-        } else {
-          this.error = 'Login failed. Please try again.';
-        }
-      }
+        this.error = this.extractErrorMessage(err) ?? 'Login failed. Please try again.';
+      },
     });
+  }
+
+  private extractErrorMessage(err: unknown): string | null {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'object' && err !== null) {
+      const e = err as Record<string, unknown>;
+      if (typeof e['message'] === 'string') return e['message'];
+      const inner = e['error'];
+      if (typeof inner === 'object' && inner !== null) {
+        const msg = (inner as Record<string, unknown>)['message'];
+        if (typeof msg === 'string') return msg;
+      }
+    }
+    if (typeof err === 'string') return err;
+    return null;
   }
 }

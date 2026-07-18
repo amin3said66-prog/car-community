@@ -1,55 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, tap, delay, of } from 'rxjs';
-import { 
-  AuthResponse, 
-  LoginRequest, 
-  RegisterRequest, 
+import { Observable, throwError, delay, of, tap } from 'rxjs';
+import {
+  AuthResponse,
+  LoginRequest,
+  RegisterRequest,
   UserProfile,
+  UpdateProfileRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
-  ChangePasswordRequest 
+  ChangePasswordRequest,
 } from './models/auth.models';
 
-// Mock users for authentication
-const MOCK_USERS = [
-  {
-    id: '1',
-    email: 'user@example.com',
-    password: 'password123',
-    name: 'John Doe',
-    avatar: 'https://i.pravatar.cc/150?img=1'
-  },
-  {
-    id: '2',
-    email: 'admin@example.com',
-    password: 'admin123',
-    name: 'Admin User',
-    avatar: 'https://i.pravatar.cc/150?img=2'
-  },
-  {
-    id: '3',
-    email: 'test@example.com',
-    password: 'test123',
-    name: 'Test User',
-    avatar: 'https://i.pravatar.cc/150?img=3'
-  }
+interface MockUser {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  avatar: string;
+}
+
+const MOCK_USERS: MockUser[] = [
+  { id: '1', email: 'user@example.com',  password: 'password123', name: 'John Doe',   avatar: 'https://i.pravatar.cc/150?img=1' },
+  { id: '2', email: 'admin@example.com', password: 'admin123',    name: 'Admin User', avatar: 'https://i.pravatar.cc/150?img=2' },
+  { id: '3', email: 'test@example.com',  password: 'test123',     name: 'Test User',  avatar: 'https://i.pravatar.cc/150?img=3' },
 ];
 
-// Mock token generator
-const generateMockToken = (userId: string): string => {
-  return btoa(JSON.stringify({ sub: userId, iat: Date.now() }));
-};
+const generateMockToken = (userId: string): string =>
+  btoa(JSON.stringify({ sub: userId, iat: Date.now() }));
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private base = `${environment.apiUrl}/auth`;
-  private useMockAuth = true; // Enable mock authentication
+  private readonly http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private readonly base = `${environment.apiUrl}/auth`;
+  private readonly useMockAuth = true;
 
   login(payload: LoginRequest): Observable<AuthResponse> {
     if (this.useMockAuth) {
@@ -57,7 +43,7 @@ export class AuthService {
     }
     return this.http.post<AuthResponse>(`${this.base}/login`, payload).pipe(
       tap(res => {
-        if (res && res.token) {
+        if (res?.token) {
           localStorage.setItem('token', res.token);
         }
       })
@@ -69,42 +55,32 @@ export class AuthService {
       u => u.email === payload.email && u.password === payload.password
     );
 
-    if (user) {
-      const token = generateMockToken(user.id);
-      const response: AuthResponse = {
-        token,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          avatar: user.avatar
-        }
-      };
-      return of(response).pipe(
-        delay(500), // Simulate network delay
-        tap(res => {
-          if (res && res.token) {
-            localStorage.setItem('token', res.token);
-            localStorage.setItem('user', JSON.stringify(res.user));
-          }
-        })
-      );
-    } else {
-      return of(null as any).pipe(
-        delay(500),
-        tap(() => {
-          throw new Error('Invalid email or password');
-        })
-      );
+    if (!user) {
+      return throwError(() => new Error('Invalid email or password')).pipe(delay(500));
     }
+
+    const token = generateMockToken(user.id);
+    const response: AuthResponse = {
+      token,
+      user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar },
+    };
+
+    return of(response).pipe(
+      delay(500),
+      tap(res => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+      })
+    );
   }
 
   register(payload: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.base}/register`, payload);
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   getToken(): string | null {
@@ -131,7 +107,7 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  updateProfile(data: any): Observable<UserProfile> {
+  updateProfile(data: UpdateProfileRequest): Observable<UserProfile> {
     return this.http.put<UserProfile>(`${this.base}/profile`, data);
   }
 }

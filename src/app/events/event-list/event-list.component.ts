@@ -1,36 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MOCK_EVENTS } from '../../data/mock-events';
 import { Event } from '../../models/event.model';
+import { EventService } from '../event.service';
+
+const CURRENT_USER_ID = 'current-user';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss']
+  styleUrls: ['./event-list.component.scss'],
 })
 export class EventListComponent implements OnInit {
+  private readonly eventService = inject(EventService);
+
   events: Event[] = [];
   filtered: Event[] = [];
   search = '';
   activeCategory = '';
-  activeStatus = '';
+  error: string | null = null;
 
-  categories = ['', 'meetup', 'race', 'workshop', 'showroom'];
+  readonly categories = ['', 'meetup', 'race', 'workshop', 'showroom'];
 
   ngOnInit(): void {
-    this.events = MOCK_EVENTS;
-    this.filtered = MOCK_EVENTS;
+    this.eventService.getAll().subscribe({
+      next: (events: Event[]) => {
+        this.events = events;
+        this.filtered = events;
+      },
+      error: () => {
+        this.error = 'Failed to load events. Please try again.';
+      },
+    });
   }
 
   applyFilters(): void {
     let result = this.events;
     if (this.search.trim()) {
       const q = this.search.toLowerCase();
-      result = result.filter(e => e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q));
+      result = result.filter(
+        e => e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q)
+      );
     }
     if (this.activeCategory) {
       result = result.filter(e => e.category === this.activeCategory);
@@ -60,7 +73,13 @@ export class EventListComponent implements OnInit {
   join(event: Event, e: MouseEvent): void {
     e.preventDefault();
     if (this.spotsLeft(event) > 0) {
-      event.attendees.push('current-user');
+      this.eventService.registerAttendee(event.id, CURRENT_USER_ID).subscribe(updated => {
+        if (updated) {
+          const index = this.events.findIndex(ev => ev.id === event.id);
+          if (index !== -1) this.events[index] = updated;
+          this.applyFilters();
+        }
+      });
     }
   }
 }

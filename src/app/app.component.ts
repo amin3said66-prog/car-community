@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class AppComponent {
+  router = inject(Router);
+
   menuOpen = false;
 
   navLinks = [
@@ -19,8 +21,6 @@ export class AppComponent {
     { path: '/customers', label: 'Community', icon: '👥' },
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
   ];
-
-  constructor(public router: Router) {}
 
   get showShell(): boolean {
     const url = this.router.url;

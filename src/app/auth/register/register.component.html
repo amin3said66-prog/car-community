@@ -6,43 +6,71 @@
       <mat-form-field class="form-field">
         <mat-label>Full Name</mat-label>
         <input matInput formControlName="fullName" placeholder="Enter your full name" />
-        <mat-error *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
-          <span *ngIf="form.get('fullName')?.errors?.['required']">Full name is required</span>
-          <span *ngIf="form.get('fullName')?.errors?.['minlength']">Full name must be at least 3 characters</span>
-        </mat-error>
+        @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
+          <mat-error>
+            @if (form.get('fullName')?.errors?.['required']) {
+              <span>Full name is required</span>
+            }
+            @if (form.get('fullName')?.errors?.['minlength']) {
+              <span>Full name must be at least 3 characters</span>
+            }
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" placeholder="Enter your email" />
-        <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-          <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
-          <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
-        </mat-error>
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <mat-error>
+            @if (form.get('email')?.errors?.['required']) {
+              <span>Email is required</span>
+            }
+            @if (form.get('email')?.errors?.['email']) {
+              <span>Please enter a valid email</span>
+            }
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password" placeholder="Enter your password" />
-        <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-          <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
-          <span *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
-        </mat-error>
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <mat-error>
+            @if (form.get('password')?.errors?.['required']) {
+              <span>Password is required</span>
+            }
+            @if (form.get('password')?.errors?.['minlength']) {
+              <span>Password must be at least 6 characters</span>
+            }
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Confirm Password</mat-label>
         <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
-        <mat-error *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">
-          <span *ngIf="form.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
-        </mat-error>
+        @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
+          <mat-error>
+            @if (form.get('confirmPassword')?.errors?.['required']) {
+              <span>Please confirm your password</span>
+            }
+          </mat-error>
+        }
       </mat-form-field>
 
-      <div *ngIf="error" class="error-message">{{ error }}</div>
+      @if (error) {
+        <div class="error-message">{{ error }}</div>
+      }
 
       <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
-        <span *ngIf="loading">Creating Account...</span>
-        <span *ngIf="!loading">Create Account</span>
+        @if (loading) {
+          <span>Creating Account...</span>
+        }
+        @if (!loading) {
+          <span>Create Account</span>
+        }
       </button>
 
       <div class="links">
