@@ -4,7 +4,7 @@
   "description": "Car Community - Secure Angular Application",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --poll 2000",
+    "start": "npx ng serve --host 0.0.0.0 --poll 2000",
     "build": "ng build --configuration production",
     "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
@@ -59,7 +59,7 @@
     "typescript": "~5.9.2"
   },
   "engines": {
-    "node": ">=18.19.0",
+    "node": ">=20.19.0",
     "npm": ">=9.6.0"
   },
   "browserslist": [
