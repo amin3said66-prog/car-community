@@ -6,41 +6,36 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c3d66',
-        },
-        secondary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
+        brand: {
+          cyan:       '#22d3ee',
+          'cyan-lt':  '#67e8f9',
+          purple:     '#a855f7',
+          'purple-lt':'#c084fc',
+          'purple-dk':'#9333ea',
+          teal:       '#06b6d4',
+          amber:      '#f59e0b',
+          green:      '#4ade80',
+          red:        '#f87171',
+          dark:       '#0f172a',
+          mid:        '#2d1b69',
         },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
-      spacing: {
-        '128': '32rem',
-        '144': '36rem',
+      keyframes: {
+        shimmer: {
+          '0%':   { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+        slideIn: {
+          from: { opacity: '0', transform: 'translateY(-16px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
       },
-      borderRadius: {
-        'xl': '1rem',
-        '2xl': '1.5rem',
+      animation: {
+        shimmer:  'shimmer 1.5s infinite',
+        'slide-in': 'slideIn 0.4s ease-out',
       },
     },
   },

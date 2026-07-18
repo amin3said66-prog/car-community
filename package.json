@@ -4,7 +4,7 @@
   "description": "Car Community - Secure Angular Application",
   "scripts": {
     "ng": "ng",
-    "start": "npx ng serve --host 0.0.0.0 --poll 2000",
+    "start": "npx ng serve --host 0.0.0.0 --poll 2000 --port 5000",
     "build": "ng build --configuration production",
     "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",

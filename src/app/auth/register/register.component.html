@@ -5,58 +5,42 @@
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field class="form-field">
         <mat-label>Full Name</mat-label>
-        <input matInput formControlName="fullName" placeholder="Enter your full name" />
+        <input matInput formControlName="fullName" placeholder="Your full name" />
         @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
           <mat-error>
-            @if (form.get('fullName')?.errors?.['required']) {
-              <span>Full name is required</span>
-            }
-            @if (form.get('fullName')?.errors?.['minlength']) {
-              <span>Full name must be at least 3 characters</span>
-            }
+            @if (form.get('fullName')?.errors?.['required']) { Full name is required }
+            @if (form.get('fullName')?.errors?.['minlength']) { Minimum 3 characters }
           </mat-error>
         }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+        <input matInput formControlName="email" type="email" placeholder="you@example.com" />
         @if (form.get('email')?.invalid && form.get('email')?.touched) {
           <mat-error>
-            @if (form.get('email')?.errors?.['required']) {
-              <span>Email is required</span>
-            }
-            @if (form.get('email')?.errors?.['email']) {
-              <span>Please enter a valid email</span>
-            }
+            @if (form.get('email')?.errors?.['required']) { Email is required }
+            @if (form.get('email')?.errors?.['email']) { Please enter a valid email }
           </mat-error>
         }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+        <input matInput formControlName="password" type="password" placeholder="At least 6 characters" />
         @if (form.get('password')?.invalid && form.get('password')?.touched) {
           <mat-error>
-            @if (form.get('password')?.errors?.['required']) {
-              <span>Password is required</span>
-            }
-            @if (form.get('password')?.errors?.['minlength']) {
-              <span>Password must be at least 6 characters</span>
-            }
+            @if (form.get('password')?.errors?.['required']) { Password is required }
+            @if (form.get('password')?.errors?.['minlength']) { Minimum 6 characters }
           </mat-error>
         }
       </mat-form-field>
 
       <mat-form-field class="form-field">
         <mat-label>Confirm Password</mat-label>
-        <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
+        <input matInput formControlName="confirmPassword" type="password" placeholder="Repeat your password" />
         @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
-          <mat-error>
-            @if (form.get('confirmPassword')?.errors?.['required']) {
-              <span>Please confirm your password</span>
-            }
-          </mat-error>
+          <mat-error>Please confirm your password</mat-error>
         }
       </mat-form-field>
 
@@ -64,18 +48,16 @@
         <div class="error-message">{{ error }}</div>
       }
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
-        @if (loading) {
-          <span>Creating Account...</span>
-        }
-        @if (!loading) {
-          <span>Create Account</span>
-        }
-      </button>
-
-      <div class="links">
-        <a mat-button routerLink="/auth/login">Already have an account? Sign in</a>
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
+          @if (loading) { <span>Creating…</span> }
+          @if (!loading) { <span>Create Account</span> }
+        </button>
       </div>
     </form>
+
+    <div class="auth-links">
+      <a routerLink="/auth/login" class="accent-link">Already have an account? Sign in</a>
+    </div>
   </div>
 </div>

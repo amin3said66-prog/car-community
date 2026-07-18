@@ -1,14 +1,13 @@
 <div class="page-header">
   <div>
-    <h1 class="page-title">📝 Community Posts</h1>
+    <h1 class="page-title"><mat-icon>article</mat-icon> Community Posts</h1>
     <p class="page-sub">{{ filtered.length }} posts from car enthusiasts</p>
   </div>
 </div>
 
-<!-- Filters -->
 <div class="filters-bar">
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><mat-icon>search</mat-icon></span>
     <input class="search-input" type="text" placeholder="Search posts…"
       [(ngModel)]="search" (ngModelChange)="applyFilters()" />
   </div>
@@ -16,17 +15,16 @@
     @for (cat of categories; track cat) {
       <button class="cat-tab" [class.active]="activeCategory === cat" (click)="setCategory(cat)">
         @if (cat === '') { All }
-        @else { {{ catIcon(cat) }} {{ cat }} }
+        @else { <mat-icon>{{ catIcon(cat) }}</mat-icon> {{ cat }} }
       </button>
     }
   </div>
 </div>
 
-<!-- Posts List -->
 <div class="posts-list">
   @if (filtered.length === 0) {
     <div class="empty-state">
-      <div class="empty-icon">📭</div>
+      <div class="empty-icon"><mat-icon>inbox</mat-icon></div>
       <h3>No posts found</h3>
       <p>Try a different search or category</p>
     </div>
@@ -41,17 +39,25 @@
             <div class="author-name">{{ post.author }}</div>
             <div class="post-date">{{ post.createdAt | date:'mediumDate' }}</div>
           </div>
-          <span class="cat-badge {{ post.category }}">{{ catIcon(post.category) }} {{ post.category }}</span>
+          <span class="cat-badge {{ post.category }}">
+            <mat-icon>{{ catIcon(post.category) }}</mat-icon> {{ post.category }}
+          </span>
         </div>
 
         <h2 class="post-title">{{ post.title }}</h2>
         <p class="post-content">{{ post.content | slice:0:200 }}…</p>
 
         <div class="post-stats">
-          <button class="stat-btn" (click)="likePost(post, $event)">❤️ {{ post.likes }} likes</button>
-          <span class="stat">💬 {{ post.comments.length }} comments</span>
-          @if (post.views) { <span class="stat">👁 {{ post.views | number }} views</span> }
-          @if (post.shares) { <span class="stat">↗ {{ post.shares }} shares</span> }
+          <button class="stat-btn" (click)="likePost(post, $event)">
+            <mat-icon>favorite</mat-icon> {{ post.likes }}
+          </button>
+          <span class="stat"><mat-icon>chat_bubble</mat-icon> {{ post.comments.length }}</span>
+          @if (post.views) {
+            <span class="stat"><mat-icon>visibility</mat-icon> {{ post.views | number }}</span>
+          }
+          @if (post.shares) {
+            <span class="stat"><mat-icon>share</mat-icon> {{ post.shares }}</span>
+          }
         </div>
 
         @if (post.comments.length > 0) {

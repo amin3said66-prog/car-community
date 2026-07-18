@@ -2,13 +2,14 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { Post } from '../../models/post.model';
 import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
 })
@@ -19,19 +20,12 @@ export class PostListComponent implements OnInit {
   filtered: Post[] = [];
   search = '';
   activeCategory = '';
-  error: string | null = null;
 
   readonly categories = ['', 'discussion', 'advice', 'news', 'showcase'];
 
   ngOnInit(): void {
     this.postService.getAll().subscribe({
-      next: (posts: Post[]) => {
-        this.posts = posts;
-        this.filtered = posts;
-      },
-      error: () => {
-        this.error = 'Failed to load posts. Please try again.';
-      },
+      next: (posts) => { this.posts = posts; this.filtered = posts; },
     });
   }
 
@@ -39,24 +33,25 @@ export class PostListComponent implements OnInit {
     let result = this.posts;
     if (this.search.trim()) {
       const q = this.search.toLowerCase();
-      result = result.filter(
-        p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q)
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q)
       );
     }
-    if (this.activeCategory) {
-      result = result.filter(p => p.category === this.activeCategory);
-    }
+    if (this.activeCategory) result = result.filter(p => p.category === this.activeCategory);
     this.filtered = result;
   }
 
-  setCategory(cat: string): void {
-    this.activeCategory = cat;
-    this.applyFilters();
-  }
+  setCategory(cat: string): void { this.activeCategory = cat; this.applyFilters(); }
 
+  /** Returns a Material Icon name for the given post category */
   catIcon(cat: string): string {
-    const map: Record<string, string> = { discussion: '💬', advice: '💡', news: '📰', showcase: '🏆' };
-    return map[cat] ?? '📝';
+    const map: Record<string, string> = {
+      discussion: 'forum',
+      advice:     'lightbulb',
+      news:       'newspaper',
+      showcase:   'emoji_events',
+    };
+    return map[cat] ?? 'article';
   }
 
   likePost(post: Post, e: Event): void {

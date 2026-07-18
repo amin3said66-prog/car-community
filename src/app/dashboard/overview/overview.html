@@ -1,30 +1,30 @@
 <div class="dash-header">
-  <h1 class="dash-title">📊 Dashboard</h1>
+  <h1 class="dash-title"><mat-icon>bar_chart</mat-icon> Dashboard</h1>
   <p class="dash-sub">Community overview at a glance</p>
 </div>
 
 <!-- Stat Cards -->
 <div class="stats-grid">
   <div class="stat-card cyan">
-    <div class="stat-icon">🚗</div>
+    <div class="stat-icon"><mat-icon>directions_car</mat-icon></div>
     <div class="stat-num">{{ stats.totalCars }}</div>
     <div class="stat-label">Total Cars</div>
     <div class="stat-meta">{{ stats.featuredCars }} featured</div>
   </div>
   <div class="stat-card purple">
-    <div class="stat-icon">👥</div>
+    <div class="stat-icon"><mat-icon>groups</mat-icon></div>
     <div class="stat-num">{{ stats.totalUsers }}</div>
     <div class="stat-label">Members</div>
     <div class="stat-meta">{{ stats.verifiedUsers }} verified</div>
   </div>
   <div class="stat-card amber">
-    <div class="stat-icon">📝</div>
+    <div class="stat-icon"><mat-icon>article</mat-icon></div>
     <div class="stat-num">{{ stats.totalPosts }}</div>
     <div class="stat-label">Posts</div>
     <div class="stat-meta">{{ stats.totalLikes }} total likes</div>
   </div>
   <div class="stat-card green">
-    <div class="stat-icon">🎉</div>
+    <div class="stat-icon"><mat-icon>celebration</mat-icon></div>
     <div class="stat-num">{{ stats.totalEvents }}</div>
     <div class="stat-label">Events</div>
     <div class="stat-meta">{{ stats.upcomingEvents }} upcoming</div>
@@ -38,7 +38,7 @@
   <section class="dash-section">
     <div class="section-head">
       <h2 class="section-title">Recent Cars</h2>
-      <a routerLink="/cars" class="see-all">See all →</a>
+      <a routerLink="/cars" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
     </div>
     <div class="item-list">
       @for (car of recentCars; track car.id) {
@@ -48,7 +48,7 @@
             <div class="list-name">{{ car.year }} {{ car.make }} {{ car.model }}</div>
             <div class="list-meta">{{ car.color }} · {{ car.fuelType }}</div>
           </div>
-          <div class="list-price">\${{ car.price | number }}</div>
+          <div class="list-price">${{ car.price | number }}</div>
         </a>
       }
     </div>
@@ -58,7 +58,7 @@
   <section class="dash-section">
     <div class="section-head">
       <h2 class="section-title">Recent Posts</h2>
-      <a routerLink="/posts" class="see-all">See all →</a>
+      <a routerLink="/posts" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
     </div>
     <div class="item-list">
       @for (post of recentPosts; track post.id) {
@@ -78,7 +78,7 @@
   <section class="dash-section">
     <div class="section-head">
       <h2 class="section-title">Upcoming Events</h2>
-      <a routerLink="/events" class="see-all">See all →</a>
+      <a routerLink="/events" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
     </div>
     <div class="item-list">
       @for (event of upcomingEvents; track event.id) {
@@ -89,11 +89,13 @@
           </div>
           <div class="list-info">
             <div class="list-name">{{ event.title }}</div>
-            <div class="list-meta">📍 {{ event.location }}</div>
+            <div class="list-meta">
+              <mat-icon>location_on</mat-icon> {{ event.location }}
+            </div>
           </div>
           <div class="event-price">
             @if (event.price === 0) { Free }
-            @else { \${{ event.price }} }
+            @else { ${{ event.price }} }
           </div>
         </a>
       }
@@ -104,7 +106,7 @@
   <section class="dash-section">
     <div class="section-head">
       <h2 class="section-title">Top Members</h2>
-      <a routerLink="/customers" class="see-all">See all →</a>
+      <a routerLink="/customers" class="see-all">See all <mat-icon>arrow_forward</mat-icon></a>
     </div>
     <div class="item-list">
       @for (user of topMembers; track user.id) {
@@ -113,11 +115,11 @@
           <div class="list-info">
             <div class="list-name">
               {{ user.fullName }}
-              @if (user.isVerified) { <span class="verified">✓</span> }
+              @if (user.isVerified) { <mat-icon class="verified-icon">verified</mat-icon> }
             </div>
             <div class="list-meta">{{ user.carsOwned }} cars · {{ user.postsCount }} posts</div>
           </div>
-          <div class="user-rating">★ {{ user.rating }}</div>
+          <div class="user-rating"><mat-icon>star</mat-icon> {{ user.rating }}</div>
         </a>
       }
     </div>
