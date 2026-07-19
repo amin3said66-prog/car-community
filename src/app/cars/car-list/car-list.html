@@ -54,7 +54,7 @@
   }
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    @for (car of filtered; track car.id) {
+    @for (car of filtered; track car.id; let first = $first) {
       <a [routerLink]="['/cars', car.id]" class="group glass-card relative block no-underline overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-purple-500/45 hover:shadow-[0_12px_40px_rgba(168,85,247,0.18)]">
         @if (car.featured) {
           <span class="featured-badge"><mat-icon>star</mat-icon> Featured</span>
@@ -63,7 +63,7 @@
         <!-- Image -->
         <div class="h-48 overflow-hidden">
           <img imgFallback="car" [src]="car.image" [alt]="car.make + ' ' + car.model"
-            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" [attr.loading]="first ? 'eager' : 'lazy'" />
         </div>
 
         <!-- Body -->
